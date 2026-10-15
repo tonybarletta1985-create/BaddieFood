@@ -1,0 +1,1733 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Taste Tour">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#EFE7FF">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Taste Tour</title>
+<style>
+:root{--sky:#EFE7FF;--ink:#2A1F4D;--grass:#1FB5A5;--mint:#DDF7EF;--sun:#FFC857;--berry:#FF4F9A;--lilac:#7B5CFF;--card:#fff;--muted:#5E5780}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+html,body{margin:0;background:var(--sky);color:var(--ink);font-family:ui-rounded,"SF Pro Rounded","Avenir Next Rounded",Nunito,"Trebuchet MS",system-ui,sans-serif;font-size:18px;line-height:1.4}
+body{padding-top:env(safe-area-inset-top);min-height:100vh;min-height:100dvh}
+#app{max-width:820px;margin:0 auto;padding:12px 14px calc(110px + env(safe-area-inset-bottom))}
+h1{font-size:26px;margin:0}
+h2{font-size:22px;margin:0 0 6px}
+h3{font-size:19px;margin:0 0 4px}
+p{margin:0 0 10px}
+.muted{color:var(--muted);font-size:16px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+:focus-visible{outline:4px solid var(--lilac);outline-offset:2px}
+
+header.top{display:flex;align-items:center;gap:10px;padding:6px 2px 12px}
+header.top .sp{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;border:3px solid var(--ink);border-radius:999px;background:#fff;padding:6px 14px;font-weight:800;min-height:44px}
+.chip.sun{background:var(--sun)}
+.chip.on{background:var(--mint)}
+.iconbtn{width:48px;height:48px;border:3px solid var(--ink);border-radius:16px;background:#fff;font-size:22px;box-shadow:0 4px 0 var(--ink)}
+
+.card{background:var(--card);border:3px solid var(--ink);border-radius:22px;box-shadow:0 5px 0 var(--ink);padding:16px;margin:0 0 18px}
+.card.mint{background:var(--mint)}
+.card.sun{background:#FFF0C9}
+.card.pink{background:#FFE3F0}
+.big{display:block;width:100%;min-height:62px;border:3px solid var(--ink);border-radius:20px;background:var(--berry);color:#fff;font-size:21px;font-weight:800;box-shadow:0 5px 0 var(--ink);padding:12px 16px}
+.big:active,.btn:active,.iconbtn:active,.rg:active,.face:active,.qo:active,.ob:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.btn{min-height:50px;border:3px solid var(--ink);border-radius:16px;background:#fff;font-weight:700;padding:8px 16px;box-shadow:0 4px 0 var(--ink)}
+.btn.grass{background:var(--grass);color:#fff}
+.btn.sun{background:var(--sun)}
+.btn.berry{background:var(--berry);color:#fff}
+.btn.sm{min-height:42px;padding:4px 12px;font-size:16px}
+.btn[disabled]{opacity:.45}
+.ghost{min-height:48px;border:0;background:none;text-decoration:underline;font-weight:700;padding:8px}
+.link{border:0;background:none;text-decoration:underline;font-weight:800;padding:0;color:var(--lilac)}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.row>*{flex:1 1 140px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}
+.fchip{min-height:44px;border:3px solid var(--ink);border-radius:999px;background:#fff;font-weight:700;padding:4px 14px}
+.fchip.on{background:var(--sun)}
+
+.layout{display:block}
+.side{display:none}
+.layout.home-tab .side{display:block}
+
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:20px;padding:10px 14px;margin:0 0 16px;font-weight:600;font-size:17px;box-shadow:0 4px 0 var(--ink)}
+.bubble:after{content:"";position:absolute;left:50%;bottom:-14px;margin-left:-12px;border:12px solid transparent;border-top-color:var(--ink);border-bottom:0}
+.bubble:before{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-9px;border:9px solid transparent;border-top-color:#fff;border-bottom:0;z-index:1}
+.qh{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:15px;margin-bottom:4px}
+.qq{font-size:20px;font-weight:800;margin:2px 0 10px}
+.qopts{display:grid;gap:8px}
+.qo{min-height:54px;text-align:left;border:3px solid var(--ink);border-radius:16px;background:#fff;font-weight:700;padding:8px 14px;box-shadow:0 3px 0 var(--ink)}
+.qo.ok{background:var(--mint)}
+.qo.no{background:#FFD9E6}
+.qo[disabled]{opacity:1;cursor:default}
+.speak{min-height:40px;border:3px solid var(--ink);border-radius:12px;background:#fff;font-size:18px;padding:0 10px}
+.scene{position:relative;height:350px;border:3px solid var(--ink);border-radius:30px;overflow:hidden;box-shadow:0 6px 0 var(--ink);margin-bottom:20px}
+.scene .deco{position:absolute;line-height:1;pointer-events:none}
+.scene .pet{position:absolute;left:50%;bottom:0;width:200px;height:300px;margin-left:-100px;animation:bob 3.4s ease-in-out infinite;cursor:pointer}
+.scene .pet svg{width:100%;height:100%}
+.scene .pet.jump{animation:jump .6s ease-out}
+.lvl{position:absolute;right:12px;top:12px;z-index:2;text-align:center;background:var(--sun);border:3px solid var(--ink);border-radius:16px;padding:4px 10px;font-weight:800;line-height:1.15}
+.lvl small{display:block;font-size:12px;font-weight:700}
+.eyes{animation:blink 5s infinite;transform-origin:50% 50%}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes jump{0%{transform:translateY(0)}35%{transform:translateY(-34px) scale(1.04)}100%{transform:translateY(0)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.bar{height:22px;border:3px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--grass);transition:width .5s}
+
+.glow{display:flex;gap:10px;flex-wrap:wrap}
+.gl{flex:1 1 150px;min-height:78px;border:3px solid var(--ink);border-radius:18px;background:#fff;padding:8px;text-align:center;font-weight:700;font-size:15px}
+.gl span{display:block;font-size:30px;line-height:1.1;filter:grayscale(1);opacity:.45}
+.gl.on{background:var(--mint)}
+.gl.on span{filter:none;opacity:1}
+
+.lvtag{display:inline-block;font-size:13px;font-weight:800;border:2px solid var(--ink);border-radius:999px;padding:0 8px;background:var(--mint);vertical-align:middle}
+.lvtag.l2{background:#FFF0C9}
+.lvtag.l3{background:#FFD0E4}
+.ladder{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.rg{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:3px solid var(--ink);border-radius:16px;background:#fff;padding:8px 12px;min-height:58px}
+.rg .ic{font-size:26px;filter:grayscale(1);opacity:.4}
+.rg b{display:block}
+.rg .m{font-size:15px;color:var(--muted);font-weight:500}
+.rg .pts{margin-left:auto;font-weight:800;white-space:nowrap}
+.rg.done{background:var(--sun);box-shadow:0 4px 0 var(--ink)}
+.rg.done .ic,.rg.next .ic{filter:none;opacity:1}
+.rg.next{border-style:dashed;box-shadow:0 4px 0 var(--ink)}
+.rg.lock{opacity:.55}
+.mrow{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:2px solid #EEE8FA}
+.mrow:first-of-type{border-top:0}
+.mrow .e{font-size:30px}
+.mrow .t{flex:1}
+.mrow.ok{opacity:.7}
+
+details{border:3px solid var(--ink);border-radius:16px;background:#fff;margin:10px 0}
+summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:800;min-height:52px;display:flex;align-items:center;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;font-size:26px}
+details[open] summary::after{content:"−"}
+details .in{padding:0 14px 12px}
+.grid2{display:block}
+select,input[type=text],input[type=number]{font:inherit;width:100%;min-height:52px;border:3px solid var(--ink);border-radius:14px;padding:8px 12px;background:#fff;color:var(--ink)}
+.reward{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:2px solid #EEE8FA}
+.reward:first-of-type{border-top:0}
+.reward .e{font-size:32px}
+.reward .t{flex:1}
+.bigbal{font-size:40px;font-weight:900;line-height:1.05}
+.logrow{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:2px solid #F0EBFA;font-size:16px}
+.logrow:first-child{border-top:0}
+.stars{font-size:22px;letter-spacing:1px;color:#E0A100}
+.tag{display:inline-block;font-size:13px;font-weight:700;background:var(--mint);border:2px solid var(--ink);border-radius:999px;padding:0 8px;margin:0 4px 4px 0}
+.passgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.pp{border:3px dashed var(--ink);border-radius:18px;text-align:center;padding:8px 2px;font-size:13px;font-weight:700;background:#fff;min-height:96px}
+.pp span{display:block;font-size:30px;filter:grayscale(1);opacity:.4}
+.pp small{display:block;font-weight:600;color:var(--muted)}
+.pp.on{border-style:solid;background:var(--mint);box-shadow:0 3px 0 var(--ink)}
+.pp.on span{filter:none;opacity:1}
+.mini{flex:0 0 46px;height:46px}
+.card.stadium{padding:8px;background:#1B1247}
+.card.stadium svg{display:block;width:100%;max-width:560px;height:auto;margin:0 auto}
+.mini svg{width:46px;height:46px;display:block}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:3px solid var(--ink);display:flex;justify-content:center;padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:20}
+nav.tabs .in{display:flex;gap:6px;width:100%;max-width:820px}
+.tab{flex:1;border:3px solid transparent;border-radius:16px;background:none;min-height:60px;font-weight:700;font-size:14px;padding:4px 2px}
+.tab span{display:block;font-size:26px;line-height:1.1}
+.tab.on{background:var(--sun);border-color:var(--ink)}
+
+.overlay{position:fixed;inset:0;background:rgba(42,31,77,.55);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.overlay.hidden{display:none}
+.sheet{background:var(--sky);border:3px solid var(--ink);border-bottom:0;border-radius:28px 28px 0 0;width:100%;max-width:820px;max-height:90vh;max-height:90dvh;overflow:auto;padding:20px 18px calc(24px + env(safe-area-inset-bottom))}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:3px solid var(--ink);border-radius:18px;background:#fff;padding:12px 14px;margin-bottom:10px;min-height:64px;box-shadow:0 4px 0 var(--ink)}
+.opt .e{font-size:34px}
+.opt b{display:block}
+.opt small{display:block;color:var(--muted);font-size:15px}
+.dots{display:flex;gap:14px;justify-content:center;margin:10px 0 16px}
+.dots i{width:24px;height:24px;border-radius:50%;border:3px solid var(--ink);background:#fff}
+.dots i.on{background:var(--ink)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:320px;margin:0 auto 10px}
+.key{height:62px;border:3px solid var(--ink);border-radius:16px;background:#fff;font-size:26px;font-weight:800;box-shadow:0 4px 0 var(--ink)}
+.key:active{transform:translateY(4px);box-shadow:none}
+.center{text-align:center}
+
+.studio-prev{width:190px;height:285px;margin:0 auto 6px}
+.studio-prev svg{width:100%;height:100%}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;margin:10px 0 16px}
+.ob{border:3px solid var(--ink);border-radius:14px;background:#fff;min-height:58px;padding:6px;font-weight:700;font-size:14px;box-shadow:0 3px 0 var(--ink)}
+.ob.sel{background:var(--sun)}
+.ob.lock{opacity:.5}
+.ob small{display:block;font-weight:600;color:var(--muted)}
+.sw{display:block;width:28px;height:28px;border-radius:50%;border:3px solid var(--ink);margin:0 auto 4px}
+.starbtn{font-size:36px;background:none;border:0;min-width:50px;min-height:52px;color:#C9BEE6;padding:0}
+.starbtn.on{color:#E0A100}
+
+.faces{display:flex;gap:12px;margin-top:8px}
+.face{flex:1;min-height:104px;border:3px solid var(--ink);border-radius:20px;background:#fff;padding:4px 4px 8px;font-weight:700;font-size:15px;box-shadow:0 4px 0 var(--ink)}
+.face svg{display:block;width:70px;height:70px;margin:0 auto 2px}
+.face.h{background:var(--mint)}
+.face.s{background:#FFD9E6}
+.face.m{background:#FFF0C9}
+
+.pets{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin:12px 0}
+.syms{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin:12px 0}
+.scard{border:3px solid var(--ink);border-radius:18px;background:#fff;padding:10px 4px;text-align:center;font-weight:700;font-size:15px;min-height:96px;box-shadow:0 4px 0 var(--ink)}
+.scard span{display:block;font-size:34px}
+.scard.sel{background:var(--sun)}
+.onb-prev{width:190px;height:285px;margin:0 auto}
+.onb-prev svg{width:100%;height:100%}
+
+#toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:700;z-index:60;opacity:0;pointer-events:none;transition:opacity .25s;max-width:90%;text-align:center}
+#toast.show{opacity:1}
+.fx{position:fixed;inset:0;pointer-events:none;z-index:70}
+.fx span{position:absolute;bottom:35%;font-size:30px;animation:pop 1.3s ease-out forwards}
+@keyframes pop{from{transform:translate(0,0) scale(.6);opacity:1}to{transform:translate(var(--x),var(--y)) scale(1.2) rotate(40deg);opacity:0}}
+.shake{animation:shake .35s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+
+@media (min-width:700px) and (orientation:landscape){
+  #app{max-width:1280px;padding-left:22px;padding-right:22px}
+  .layout{display:grid;grid-template-columns:minmax(340px,38%) minmax(0,1fr);gap:24px;align-items:start}
+  .side{display:block;position:sticky;top:8px;max-height:calc(100vh - 150px);overflow:auto;padding:4px 4px 10px}
+  .scene{height:min(44vh,360px)}
+  .scene .pet{width:150px;height:225px;margin-left:-75px}
+  .qo{min-height:48px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;align-items:start}
+  .grid2>details{margin:0}
+  nav.tabs .in{max-width:1280px}
+  .sheet{max-width:680px;border-radius:28px;border-bottom:3px solid var(--ink);margin-bottom:4vh}
+  .overlay{align-items:center}
+}
+@media (orientation:landscape) and (max-height:560px){
+  .scene{height:200px;margin-bottom:12px}
+  .scene .pet{width:112px;height:168px;margin-left:-56px}
+  .side{max-height:calc(100vh - 128px)}
+  .bubble{font-size:16px;padding:8px 12px}
+  header.top{padding-bottom:6px}
+  .tab{min-height:50px}
+  .tab span{font-size:20px}
+}
+@media (min-width:600px) and (orientation:portrait){
+  #app{max-width:860px}
+  .scene{height:400px}
+  .scene .pet{width:240px;height:360px;margin-left:-120px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="overlay" class="overlay hidden"><div class="sheet" id="sheet"></div></div>
+<div id="toast"></div>
+<script>
+/* Taste Tour: Recipe Bank (family fridge and pantry ideas), countries and the fridge finder.
+   Recipe row: [type, emoji, name, groups, how, pantry, flags]
+   type:   s snack, b breakfast, l lunch, d dinner
+   groups: v veg, f fruit, g grains, p protein, d dairy
+   flags:  a = needs a grown-up (hob, oven, knife, blender) */
+const FOOD_ROWS=[
+/* ---------- SNACKS ---------- */
+['s','🥒','Cucumber and tzatziki','vd','Slice cucumber and dunk it in tzatziki.','cucumber, tzatziki','kn'],
+['s','🍓','Rainbow fruit bowl','f','Chop three different colours of fruit into a bowl.','any fruit','kn'],
+['s','🥛','Yoghurt and berries','df','Spoon yoghurt over berries. Frozen berries are fine.','yoghurt, berries','kn'],
+['s','🥓','Ham and cheese roll-ups','pd','Roll a slice of cheese inside a slice of ham.','ham, cheese','kn'],
+['s','🥚','Boiled egg','p','Simmer an egg for 10 minutes, cool it in cold water, peel it.','egg','kna'],
+['s','🥕','Veg sticks and hummus','vp','Cut carrot, celery or capsicum into sticks and dunk them.','hummus, carrot, celery','n'],
+['s','🍎','Apple slices and cheese','fd','Slice an apple and pair it with cheese cubes.','apple, cheese','k'],
+['s','🍘','Rice cake with a thin spread of peanut butter','gp','Spread peanut butter thinly. Add banana slices if you like.','rice cakes, peanut butter','k'],
+['s','🧀','A few crackers and cheese','gd','Count out six crackers and top each with cheese.','crackers, cheese','k'],
+['s','🍌','Peanut butter banana bites','fp','Slice a banana, put peanut butter between two slices like tiny sandwiches.','banana, peanut butter',''],
+['s','🍿','Plain popcorn with cinnamon','g','Pop plain corn, then dust with a pinch of cinnamon.','popcorn kernels, cinnamon','a'],
+['s','🌿','Peanut butter celery logs','vp','Fill celery sticks with peanut butter and add a few sultanas on top.','celery, peanut butter, sultanas',''],
+['s','🍇','Frozen grapes','f','Pop grapes in the freezer for 2 hours for icy sweet bites.','grapes','n'],
+['s','🧊','Yoghurt bark','df','Spread yoghurt on a tray, dot with berries, freeze, then snap into pieces.','yoghurt, berries','n'],
+['s','🍊','Mandarin or orange segments','f','Peel and pull into segments like a little treasure.','mandarin or orange','n'],
+['s','🥝','Kiwi spoon','f','Cut a kiwi in half and scoop it out with a teaspoon.','kiwi fruit','n'],
+['s','🍅','Cheese and cherry tomato stacks','vd','Stack a cherry tomato on a cube of cheese on a cracker.','cherry tomatoes, cheese, crackers',''],
+['s','🥑','Avocado toast fingers','vg','Mash avocado on toast and cut into fingers.','avocado, bread','a'],
+['s','🥣','Oat energy balls','gp','Mix oats, peanut butter and a little honey, then roll into balls.','oats, peanut butter, honey',''],
+['s','🍞','Cinnamon toast fingers','g','Toast with a thin scrape of butter and cinnamon, cut into fingers.','bread, butter, cinnamon',''],
+['s','🥨','Crackers and tzatziki','gd','Use crackers as scoops for tzatziki.','crackers, tzatziki','n'],
+['s','🍐','Pear and cheese','fd','Slice a ripe pear and eat with a slice of cheese.','pear, cheese','n'],
+['s','🍪','Banana oat mini cookies','fg','Mash a banana, mix with a cup of oats, bake in spoonfuls for 12 minutes.','banana, oats','a'],
+['s','🥒','Cucumber boats','vp','Scoop out a cucumber half and fill with tuna or cream cheese.','cucumber, tuna or cream cheese','n'],
+['s','🌽','Warm corn and cheese cups','vd','Warm canned corn and sprinkle with a little cheese.','canned corn, cheese','a'],
+['s','🍎','Apple rings','fp','Slice an apple into rounds, scoop the core, spread peanut butter and sprinkle oats.','apple, peanut butter, oats','a'],
+['s','🍌','Banana milk smoothie','fd','Blend a banana, a cup of milk and ice.','banana, milk','na'],
+['s','🍓','Strawberry yoghurt pops','df','Mix yoghurt with mashed strawberries, pour into moulds and freeze.','yoghurt, strawberries','n'],
+['s','🥬','Lettuce wraps','vp','Fill a lettuce leaf with ham, cheese and cucumber and roll it.','lettuce, ham, cheese, cucumber','n'],
+['s','🍚','Rice cake sandwich','gd','Two rice cakes with cream cheese and cucumber in the middle.','rice cakes, cream cheese, cucumber',''],
+['s','🍏','Apple with cinnamon yoghurt dip','fd','Stir cinnamon into yoghurt and dip apple slices.','apple, yoghurt, cinnamon','n'],
+['s','🍠','Sweet potato wedges','v','Cut into wedges, drizzle with oil, bake until golden.','sweet potato, olive oil','a'],
+['s','🥦','Broccoli trees with cheesy dip','vd','Steam broccoli lightly and dip in warm cheese sauce or cream cheese.','broccoli, cheese','a'],
+['s','🍉','Watermelon wedges','f','Cut into wedges and eat outside if the weather is good.','watermelon','n'],
+['s','🥭','Frozen mango chunks','f','Eat straight from the freezer like sweet ice.','frozen mango','n'],
+['s','🟩','Edamame pods','vp','Steam or microwave, then pop the beans out of the pods.','frozen edamame','na'],
+['s','🥪','Mini ham sandwich squares','gp','Make a small ham and cucumber sandwich and cut into four squares.','bread, ham, cucumber',''],
+['s','🥙','Hummus and pita triangles','gp','Toast pita, cut into triangles and dip in hummus.','pita, hummus','n'],
+['s','🐟','Tuna cracker stackers','pg','Spoon tuna mixed with a little yoghurt onto crackers.','canned tuna, crackers, yoghurt',''],
+['s','🍫','Cocoa banana yoghurt','df','Stir a small pinch of cocoa into yoghurt and top with banana.','yoghurt, cocoa, banana','n'],
+['s','🫐','Berry chia pot','df','Stir chia seeds into milk and berries, leave in the fridge to set.','chia seeds, milk, berries','n'],
+['s','🍌','Frozen yoghurt banana bites','fd','Dip banana pieces in yoghurt and freeze on a tray.','banana, yoghurt','n'],
+['s','🧁','Cheese and cracker sandwiches','gd','Put a slice of cheese between two crackers.','cheese, crackers','k'],
+['s','🌽','Corn thins with avocado','gv','Mash avocado on corn thins and sprinkle with a little pepper.','corn thins, avocado',''],
+['s','🍡','Fruit kebabs','fd','Thread fruit onto a paddle-pop stick and dip in yoghurt.','fruit, yoghurt, paddle-pop sticks','n'],
+['s','🍎','Cinnamon baked apple','f','Core an apple, sprinkle with cinnamon, microwave for 2 minutes.','apple, cinnamon','a'],
+['s','🥜','Trail mix mini','gp','Mix cereal, sultanas and a few seeds in a small bowl.','cereal, sultanas, seeds',''],
+['s','🍢','Cheese and ham pinwheels','gp','Roll a wrap with cream cheese and ham, slice into wheels.','wrap, cream cheese, ham',''],
+['s','🥕','Carrot coins with dip','vd','Slice carrots into coins and dip in yoghurt ranch or tzatziki.','carrot, yoghurt','n'],
+['s','🍇','Grape and cheese skewers','fd','Cut grapes in half and thread with cheese cubes onto a paddle-pop stick.','grapes, cheese','n'],
+['s','🥛','Warm milk with cinnamon','d','Warm milk gently and stir in a pinch of cinnamon.','milk, cinnamon','na'],
+['s','🍑','Peach and yoghurt cup','fd','Chop a peach (or use tinned in juice) and spoon yoghurt on top.','peach, yoghurt','n'],
+['s','🥔','Baked potato fingers','v','Cut a potato into fingers, toss in oil, bake until crisp.','potato, olive oil','a'],
+['s','🧆','Roasted chickpeas','vp','Drain a tin, toss in oil, roast until crunchy.','canned chickpeas, olive oil','a'],
+['s','🍞','Mini toast pizzas','gd','Top a slice of toast with tomato paste and cheese and grill until melted.','bread, tomato paste, cheese','a'],
+/* ---------- BREAKFASTS ---------- */
+['b','🥣','Cereal with milk and fruit','gdf','Pour cereal and milk, top with banana or berries.','cereal, milk, fruit','k'],
+['b','🍳','Egg and toast soldiers','pg','Soft-boil or fry an egg, cut toast into fingers for dipping.','egg, bread','ka'],
+['b','🥛','Yoghurt parfait','dfg','Layer yoghurt, muesli and berries in a glass.','yoghurt, muesli, berries',''],
+['b','🍌','Peanut butter banana toast','gpf','Spread peanut butter on toast and top with banana slices.','bread, peanut butter, banana','k'],
+['b','🥣','Overnight oats','gdf','Mix oats, milk and yoghurt in a jar, leave overnight, top with fruit.','oats, milk, yoghurt, fruit',''],
+['b','🥤','Fruit and yoghurt smoothie','fd','Blend yoghurt, milk and frozen fruit.','yoghurt, milk, frozen fruit','a'],
+['b','🍳','Scrambled eggs on toast','pg','Whisk eggs and milk, cook gently, spoon onto toast.','eggs, milk, bread','a'],
+['b','🍞','French toast fingers','gp','Dip bread in egg, milk and cinnamon, fry until golden.','bread, egg, milk, cinnamon','a'],
+['b','🥞','Pikelets with berries','gf','Mix flour, milk and egg, cook small rounds, top with berries.','flour, egg, milk, berries','a'],
+['b','🧀','Ham and cheese toastie','gpd','Make in the sandwich press and cut into triangles.','bread, ham, cheese','ka'],
+['b','🫘','Baked beans on toast','gp','Warm beans and spoon over toast.','baked beans, bread','a'],
+['b','🥣','Banana porridge','gf','Microwave oats and milk, stir in mashed banana and cinnamon.','oats, milk, banana','a'],
+['b','🥓','Egg and bacon muffin','gp','Toast a muffin, add a fried egg and a rasher of bacon.','English muffin, egg, bacon','ka'],
+['b','🍳','Mug omelette','pd','Whisk egg, cheese and ham in a mug and microwave for 1 minute.','egg, cheese, ham','a'],
+['b','🍏','Bircher muesli','gdf','Grate an apple into oats and yoghurt and leave overnight.','apple, oats, yoghurt',''],
+['b','🥑','Avocado toast with egg','vgp','Mash avocado on toast and top with an egg.','avocado, bread, egg','a'],
+['b','🌯','Peanut butter banana wrap','gpf','Roll a banana inside a wrap spread with peanut butter.','wrap, peanut butter, banana',''],
+['b','🥣','Wheat biscuits with banana','gdf','Crumble wheat biscuits into milk and add banana slices.','wheat biscuits, milk, banana',''],
+['b','🍞','Fruit toast with ricotta','gdf','Toast fruit bread and spread with ricotta or cream cheese.','fruit bread, ricotta',''],
+['b','🌮','Breakfast quesadilla','gpd','Fill a wrap with scrambled egg and cheese, fold and toast in a pan.','wrap, egg, cheese','a'],
+/* ---------- LUNCHES ---------- */
+['l','🧀','Ham and cheese toastie with cucumber','gpd','Press the toastie and serve with cucumber sticks.','bread, ham, cheese, cucumber','ka'],
+['l','🍣','Homemade sushi rolls','gpv','Spread rice on nori, add cucumber, avocado, egg or chicken, roll and slice.','sushi rice, nori, cucumber, egg','k'],
+['l','🌯','Quesadilla','gpd','Fill a wrap with cheese and ham or beans, fold, and toast in a pan.','wrap, cheese, ham or beans','a'],
+['l','🌯','Chicken, cheese and cucumber wrap','gpv','Roll shredded chicken, cheese and cucumber in a wrap.','wrap, cooked chicken, cheese, cucumber',''],
+['l','🍝','Pasta salad','gvp','Mix cold pasta with cherry tomatoes, cucumber, cheese and olive oil.','pasta, tomatoes, cucumber, cheese','n'],
+['l','🍕','Mini wrap pizzas','gdp','Spread tomato paste on a wrap, add cheese and ham, bake until bubbly.','wrap, tomato paste, cheese, ham','ka'],
+['l','🐟','Tuna and corn sandwich','gp','Mix tuna and canned corn with a spoon of yoghurt and spread on bread.','canned tuna, corn, bread',''],
+['l','🥚','Egg salad sandwich','gp','Mash a boiled egg with yoghurt, spread on bread with lettuce.','egg, yoghurt, bread, lettuce','a'],
+['l','🍚','Rice bowl','gpv','Top rice with corn, cucumber and an egg or shredded chicken with a drizzle of soy sauce.','rice, corn, cucumber, egg','a'],
+['l','🌯','Bean and cheese burrito','gpd','Roll beans, rice and cheese in a wrap.','wrap, canned beans, rice, cheese',''],
+['l','🥙','Hummus and veg pita pocket','gpv','Stuff a pita with hummus, cucumber, tomato and lettuce.','pita, hummus, cucumber, tomato',''],
+['l','🧁','Mac and cheese muffins','gd','Spoon cooked mac and cheese into muffin tins and bake until golden.','pasta, cheese, milk','ka'],
+['l','🌀','Sandwich pinwheels','gpv','Spread a wrap with cream cheese, add ham and cucumber, roll tight and slice.','wrap, cream cheese, ham, cucumber',''],
+['l','🍳','Chicken fried rice','gpv','Stir-fry leftover rice with egg, peas, corn and a splash of soy sauce.','rice, egg, peas, corn','a'],
+['l','🍳','Cheese and ham omelette','pd','Whisk eggs, pour into a pan, add cheese and ham and fold.','eggs, cheese, ham','a'],
+['l','🌽','Sweet corn fritters','gv','Mix canned corn, flour, egg and milk and fry spoonfuls until golden.','canned corn, flour, egg, milk','a'],
+['l','🍜','Easy noodle soup','gvp','Simmer noodles and veg in chicken stock.','noodles, stock, frozen veg','a'],
+['l','🍅','Tomato soup with cheese toast','gvd','Heat tinned tomato soup and serve with cheese on toast.','tinned tomato soup, cheese, bread','a'],
+['l','🍱','Bento snack box','gpfv','Fill compartments with cheese, ham, cucumber, crackers and fruit.','cheese, ham, cucumber, crackers, fruit','kn'],
+['l','🍗','Crunchy baked chicken strips','pg','Dip chicken strips in egg and crumbs and bake until golden.','chicken, egg, breadcrumbs','ka'],
+['l','🐟','Tuna patties','pgv','Mix tuna with mashed potato and egg, shape into patties and fry.','canned tuna, potato, egg','a'],
+['l','🧁','Mini frittata muffins','pvd','Whisk eggs with cheese and veg, pour into muffin tins and bake.','eggs, cheese, frozen veg','a'],
+['l','🥪','Baked bean jaffle','gp','Put beans and cheese between bread and toast in a jaffle iron.','baked beans, cheese, bread','a'],
+['l','🥙','Greek chicken pita','gpv','Fill pita with chicken, cucumber, tomato and tzatziki.','pita, chicken, cucumber, tzatziki','k'],
+['l','🌮','Taco boats','vpd','Spoon cooked mince, cheese and tomato into lettuce or taco shells.','mince, cheese, lettuce, tomato','a'],
+['l','🥔','Baked potato bar','vpd','Bake a potato, split it and let her choose beans, cheese or tuna.','potato, beans, cheese','a'],
+['l','🥬','Chicken lettuce cups','pv','Spoon chicken and corn into lettuce cups.','chicken, corn, lettuce',''],
+['l','🍅','Cheesy tomato toast','gd','Top toast with sliced tomato and cheese and grill.','bread, tomato, cheese','a'],
+/* ---------- DINNERS ---------- */
+['d','🍗','Chicken schnitzel and vegetables','pvg','Crumb a chicken breast, bake or pan-fry, serve with steamed veg.','chicken, breadcrumbs, veg','ka'],
+['d','🥙','Greek chicken, pita and salad','pvg','Marinate chicken in lemon and oregano, cook, serve with pita and salad.','chicken, lemon, pita, cucumber, tomato','ka'],
+['d','🍝','Pasta with meat and hidden veg','gpv','Add grated carrot and zucchini to a meat sauce, toss with pasta.','pasta, mince, tomato, carrot, zucchini','ka'],
+['d','🍚','Rice with protein and veg','gpv','Cook rice and serve with chicken, fish or beef and a pile of veg.','rice, protein, veg','ka'],
+['d','🍔','Burger bowls','pvg','Cook a patty, serve on lettuce with tomato, cheese and half a bun.','mince, lettuce, tomato, cheese, bun','ka'],
+['d','🥩','Steak strips with roast veg','pv','Slice cooked steak and serve with roasted pumpkin and carrot.','steak, pumpkin, carrot','ka'],
+['d','🌭','Sheet pan sausages and veg','pv','Roast sausages with chopped veg on one tray.','sausages, veg','a'],
+['d','🍗','Drumsticks with sweet potato wedges','pv','Roast drumsticks and sweet potato wedges together.','chicken drumsticks, sweet potato','a'],
+['d','🥘','Beef and veg stir-fry with rice','pvg','Stir-fry thin beef and frozen veg with soy sauce and serve with rice.','beef, frozen veg, soy sauce, rice','a'],
+['d','🍕','Homemade pizza night','gdpv','Build pizzas on wraps or bases with tomato, cheese and her choice of toppings.','pizza bases, tomato paste, cheese','ka'],
+['d','🐟','Crumbed fish with salad','pgv','Bake crumbed fish and serve with salad and oven chips.','fish fillets, breadcrumbs, salad','a'],
+['d','🍝','Spaghetti bolognese with grated carrot','gpv','Simmer mince with tomato and grated carrot, serve over spaghetti.','spaghetti, mince, tomato, carrot','ka'],
+['d','🍳','Chicken fried rice dinner','gpv','Stir-fry leftover rice with chicken, egg, peas and corn.','rice, chicken, egg, peas','a'],
+['d','🌮','Build-your-own tacos','pvd','Set out mince, cheese, lettuce and tomato in bowls and let her build.','taco shells, mince, cheese, lettuce','a'],
+['d','🥔','Loaded baked potatoes','vpd','Bake potatoes and top with beans, cheese and ham.','potatoes, beans, cheese','a'],
+['d','🍝','Meatballs in tomato sauce','pgv','Roll mince into balls, simmer in tomato sauce, serve with pasta.','mince, tomato sauce, pasta','a'],
+['d','🍢','Chicken and veg kebabs','pv','Thread chicken, capsicum and zucchini onto skewers and grill.','chicken, capsicum, zucchini','a'],
+['d','🍛','Mild chicken curry with rice','pgv','Simmer chicken and pumpkin in coconut milk with mild curry paste.','chicken, pumpkin, coconut milk, rice','a'],
+['d','🥔','Sausages with mash and peas','pgv','Grill sausages and serve with mash and peas.','sausages, potatoes, peas','a'],
+['d','🍜','Egg fried noodles','gpv','Stir-fry noodles with egg, frozen veg and soy sauce.','noodles, egg, frozen veg','a'],
+['d','🍲','Pumpkin soup with toast','vg','Simmer pumpkin in stock, blend and serve with toast soldiers.','pumpkin, stock, bread','a'],
+['d','🧆','Mini meatloaves','pv','Mix mince with grated veg and breadcrumbs, bake in muffin tins.','mince, veg, breadcrumbs, egg','a'],
+['d','🍲','Chicken noodle soup','gpv','Simmer chicken, noodles and veg in stock.','chicken, noodles, veg','a'],
+['d','🍝','Tuna pasta bake','gpd','Mix pasta, tuna, peas and cheese sauce, top with cheese and bake.','pasta, tuna, peas, cheese','a'],
+['d','🥬','San choy bow cups','pv','Spoon cooked mince and veg into lettuce cups.','mince, lettuce, carrot','a'],
+['d','🥚','Veggie frittata','pvd','Whisk eggs with cheese and veg, pour into a pan and bake.','eggs, cheese, veg','a'],
+['d','🧀','Bean and cheese nachos','gpd','Layer corn chips, beans and cheese and bake until melted.','corn chips, beans, cheese','a'],
+['d','🐟','Fish and veg foil parcels','pv','Wrap fish and veg in foil with lemon and bake.','fish, veg, lemon','a'],
+['d','🌶️','Chicken fajita strips','pvg','Fry chicken and capsicum strips with mild spices and serve in wraps.','chicken, capsicum, wraps','a'],
+['d','🍗','Honey soy chicken','pg','Coat chicken in honey and soy and bake, serve with rice and broccoli.','chicken, honey, soy sauce, rice','a'],
+['d','🍚','Burrito bowl','gpvd','Rice topped with beans, corn, cheese and a little salsa.','rice, beans, corn, cheese',''],
+['d','🍣','Homemade sushi night','gpv','Set out rice, nori and fillings, and everyone rolls their own.','sushi rice, nori, cucumber, avocado, egg','k'],
+
+['s','🧀','Cheese quesadilla triangles','gd','Fill a wrap with cheese, toast in a pan, cut into triangles.','wrap, cheese','a'],
+['s','🌿','Celery and cream cheese','vd','Fill celery sticks with cream cheese.','celery, cream cheese','n'],
+['s','🍎','Apple nachos','fp','Fan apple slices on a plate, drizzle a little peanut butter and add sultanas.','apple, peanut butter, sultanas','n'],
+['s','🌈','Hummus rainbow plate','vp','Arrange carrot, cucumber and capsicum sticks around a bowl of hummus.','hummus, veg','n'],
+['s','🫐','Frozen berry yoghurt cups','df','Spoon yoghurt and berries into cups and freeze for an hour.','yoghurt, berries','n'],
+['s','🍅','Tomato and basil toast','gv','Top toast with sliced tomato and a few basil leaves.','bread, tomato, basil',''],
+['s','🍌','Banana ice cream','f','Blend frozen banana until creamy.','frozen banana','na'],
+['s','🍐','Pear and ricotta toast','fdg','Spread ricotta on toast and top with pear slices.','bread, ricotta, pear',''],
+['s','🌽','Mini corn cobs','v','Steam or microwave baby corn and dip in tzatziki.','baby corn, tzatziki','na'],
+['s','🥬','Rice paper rolls','vp','Soak rice paper, fill with cucumber, carrot and chicken, roll up.','rice paper, cucumber, carrot, chicken',''],
+['s','🐟','Tuna cucumber rounds','vp','Top thick cucumber slices with a spoon of tuna.','cucumber, canned tuna','n'],
+['s','🟩','Edamame and corn cup','v','Mix warm edamame and corn in a cup.','frozen edamame, corn','na'],
+['s','🥕','Veggie fritter bites','vp','Mix grated zucchini, egg and flour and fry small spoonfuls.','zucchini, egg, flour','a'],
+['s','🥒','Baked zucchini fries','v','Cut zucchini into sticks, coat in crumbs and bake.','zucchini, breadcrumbs, egg','a'],
+['s','🍏','Cinnamon apple chips','f','Slice apple thinly, sprinkle with cinnamon and bake slowly until crisp.','apple, cinnamon','a'],
+['s','🥣','Oat and banana bars','fg','Mash bananas with oats, press into a tin and bake.','banana, oats','a'],
+['s','🥭','Mango lassi','fd','Blend mango with yoghurt and a splash of milk.','mango, yoghurt, milk','na'],
+['s','🍍','Pineapple and cottage cheese','fd','Spoon cottage cheese over pineapple pieces.','cottage cheese, pineapple','n'],
+['s','🥑','Egg and avocado crackers','vpg','Mash egg and avocado and spread on crackers.','egg, avocado, crackers',''],
+['s','🧁','Cheesy corn muffin bites','gd','Mix corn, cheese, flour and egg and bake in mini muffin tins.','corn, cheese, flour, egg','a'],
+['b','🥤','Berry smoothie bowl','fd','Blend frozen berries with yoghurt, pour into a bowl and top with cereal.','frozen berries, yoghurt, cereal','a'],
+['b','🍳','Egg in a hole','pg','Cut a hole in toast, crack an egg inside and fry.','bread, egg','a'],
+['b','🥞','Two-ingredient banana pancakes','fp','Mash a banana with two eggs and fry small pancakes.','banana, eggs','a'],
+['b','🥣','Baked oat cups','gf','Mix oats, milk, egg and banana and bake in muffin tins.','oats, milk, egg, banana','a'],
+['b','🍞','Berry yoghurt toast','gdf','Spread thick yoghurt on toast and top with berries.','bread, yoghurt, berries',''],
+['b','🧁','Savoury cheese and corn muffin','gd','Bake corn and cheese muffins for grab-and-go mornings.','corn, cheese, flour, egg','a'],
+['b','🍠','Sweet potato toast with egg','vp','Toast sweet potato slices and top with a soft egg.','sweet potato, egg','a'],
+['b','🥜','Peanut butter oat bites','gp','Roll oats, peanut butter and a little honey into balls.','oats, peanut butter, honey',''],
+['b','🥣','Muesli with milk and fruit','gdf','Pour muesli and milk and add sliced fruit.','muesli, milk, fruit',''],
+['b','🍓','Fruit and cheese plate','fd','Arrange fruit slices and cheese cubes on a plate.','fruit, cheese',''],
+['l','🌯','Chicken and avocado wrap','gpv','Roll sliced chicken and avocado in a wrap.','wrap, chicken, avocado',''],
+['l','🥪','Corn and cheese sandwich','gd','Mix corn with cheese and make a sandwich.','bread, corn, cheese',''],
+['l','🍕','Veggie pizza scrolls','gv','Roll pizza dough with tomato and cheese and slice into scrolls.','dough, tomato paste, cheese','a'],
+['l','🥧','Zucchini slice','pv','Mix grated zucchini, egg, cheese and flour and bake.','zucchini, egg, cheese, flour','a'],
+['l','🌯','Hummus and ham wrap','gp','Spread hummus on a wrap and add ham and cucumber.','wrap, hummus, ham, cucumber',''],
+['l','🍚','Couscous salad','gv','Fluff couscous with hot water and mix in cucumber and tomato.','couscous, cucumber, tomato',''],
+['l','🧆','Chickpea salad pita','gpv','Mix chickpeas, cucumber and yoghurt and stuff into pita.','canned chickpeas, pita, cucumber, yoghurt',''],
+['l','🍍','Ham and pineapple pita pizza','gpf','Top a pita with tomato paste, ham, pineapple and cheese and grill.','pita, tomato paste, ham, pineapple','a'],
+['l','🥚','Cheese and veg omelette wrap','pvd','Make a thin omelette, add cheese and veg and roll in a wrap.','eggs, cheese, wrap','a'],
+['l','🎃','Pumpkin and feta muffins','vd','Mix mashed pumpkin, feta and flour and bake in a muffin tin.','pumpkin, feta, flour, egg','a'],
+['l','🍜','Chicken noodle salad','gpv','Toss cold noodles with chicken, cucumber and a little soy.','noodles, chicken, cucumber, soy sauce',''],
+['l','🍲','Minestrone soup','gv','Simmer pasta, tinned tomatoes and veg in stock.','pasta, tinned tomatoes, veg, stock','a'],
+['l','🧀','Tuna melt toast','gpd','Top toast with tuna and cheese and grill until melted.','bread, canned tuna, cheese','a'],
+['l','🍣','Sushi hand rolls','gpv','Roll nori into cones and fill with rice, cucumber and egg.','nori, sushi rice, cucumber, egg','k'],
+['l','🥗','Greek salad cups','vd','Fill lettuce cups with cucumber, tomato and feta.','lettuce, cucumber, tomato, feta',''],
+['l','🥣','Egg fried rice cups','gpv','Press egg fried rice into muffin tins and bake.','rice, egg, peas','a'],
+['d','🍗','Baked chicken tenders with sweet potato mash','pvg','Bake crumbed tenders and serve with mash.','chicken, breadcrumbs, sweet potato','a'],
+['d','🥙','Lamb koftas with tzatziki and pita','pdg','Shape lamb mince into sausages, grill, and serve with tzatziki and pita.','lamb mince, tzatziki, pita','a'],
+['d','🍛','Mild beef and bean chilli with rice','pgv','Simmer mince, beans and tomato with mild spices and serve with rice.','mince, beans, tomato, rice','a'],
+['d','🍝','Creamy chicken and veg pasta','gpvd','Stir chicken, peas and a little cream cheese through pasta.','pasta, chicken, peas, cream cheese','a'],
+['d','🍽️','Easy tray lasagne','gpvd','Layer pasta sheets, meat sauce and cheese and bake.','lasagne sheets, mince, tomato, cheese','a'],
+['d','🥧','Sweet potato cottage pie','pv','Top mince and veg with mashed sweet potato and bake.','mince, veg, sweet potato','a'],
+['d','🍲','Chicken and corn soup','pvg','Simmer chicken, corn and stock, then stir in an egg.','chicken, corn, stock, egg','a'],
+['d','🌮','Fish tacos with slaw','pvg','Fry fish pieces and serve in tortillas with shredded cabbage.','fish, tortillas, cabbage','a'],
+['d','🐟','Teriyaki salmon with rice and broccoli','pgv','Glaze salmon with teriyaki sauce and bake, serve with rice.','salmon, teriyaki sauce, rice, broccoli','a'],
+['d','🌭','Sausage and tomato pasta','gpv','Slice sausages, simmer in tomato sauce and toss with pasta.','sausages, tomato sauce, pasta','a'],
+['d','🍖','Rissoles with salad','pv','Mix mince, egg and breadcrumbs, pan-fry patties and serve with salad.','mince, egg, breadcrumbs, salad','a'],
+['d','🍗','Baked chicken parmigiana','pdg','Crumb chicken, top with tomato and cheese and bake.','chicken, breadcrumbs, tomato, cheese','a'],
+['d','🍔','Mini burger sliders with salad','pgv','Make small patties in small buns with lettuce and tomato.','mince, small buns, lettuce, tomato','a'],
+['d','🍝','Ham and pea pasta','gpv','Toss pasta with ham, peas and a little cheese.','pasta, ham, peas, cheese','a'],
+['d','🍛','Mild butter chicken with rice','pgd','Simmer chicken in a tomato and cream sauce and serve with rice.','chicken, tomato, cream, rice','a'],
+['d','🍝','Spinach and ricotta pasta shells','gdv','Fill pasta shells with ricotta and spinach, top with sauce and bake.','pasta shells, ricotta, spinach, tomato','a'],
+['d','🍠','Baked sweet potato with beef mince','pv','Bake sweet potatoes and top with savoury mince.','sweet potato, mince','a'],
+['d','🍢','Chicken satay skewers with rice','pg','Grill chicken skewers with a mild peanut sauce.','chicken, peanut butter, rice','a'],
+['d','🥙','Build-your-own pita dinner','gpv','Set out pita, chicken or falafel, salad and tzatziki.','pita, chicken, salad, tzatziki',''],
+];
+const RECIPES=FOOD_ROWS.map(r=>({
+  t:r[0],e:r[1],n:r[2],g:r[3].split(''),how:r[4],pan:r[5],adult:r[6].includes('a'),
+  id:r[2].toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')
+}));
+const COUNTRIES=[
+ ['Australia','🇦🇺'],['New Zealand','🇳🇿'],['Italy','🇮🇹'],['Japan','🇯🇵'],['China','🇨🇳'],['Thailand','🇹🇭'],['Vietnam','🇻🇳'],['South Korea','🇰🇷'],
+ ['India','🇮🇳'],['Mexico','🇲🇽'],['United States','🇺🇸'],['Canada','🇨🇦'],['United Kingdom','🇬🇧'],['Ireland','🇮🇪'],['France','🇫🇷'],['Spain','🇪🇸'],
+ ['Portugal','🇵🇹'],['Greece','🇬🇷'],['Turkey','🇹🇷'],['Lebanon','🇱🇧'],['Israel','🇮🇱'],['Iran','🇮🇷'],['Morocco','🇲🇦'],['Egypt','🇪🇬'],
+ ['Ethiopia','🇪🇹'],['Nigeria','🇳🇬'],['South Africa','🇿🇦'],['Brazil','🇧🇷'],['Argentina','🇦🇷'],['Peru','🇵🇪'],['Cuba','🇨🇺'],['Jamaica','🇯🇲'],
+ ['Germany','🇩🇪'],['Austria','🇦🇹'],['Switzerland','🇨🇭'],['Netherlands','🇳🇱'],['Poland','🇵🇱'],['Hungary','🇭🇺'],['Serbia','🇷🇸'],['Croatia','🇭🇷'],
+ ['Sweden','🇸🇪'],['Russia','🇷🇺'],['Indonesia','🇮🇩'],['Malaysia','🇲🇾'],['Singapore','🇸🇬'],['Philippines','🇵🇭'],['Sri Lanka','🇱🇰'],['Pakistan','🇵🇰'],['Fiji','🇫🇯']
+];
+const ING=[['egg','egg'],['cheese','cheese'],['chicken','chicken'],['mince','mince'],['bacon','bacon'],['ham','ham'],['tuna','tuna'],['sausages','sausage'],['fish','fish'],['rice','rice'],['pasta','pasta'],['bread','bread'],['wraps','wrap'],['potato','potato'],['sweet potato','sweet potato'],['pumpkin','pumpkin'],['corn','corn'],['peas','peas'],['tomato','tomato'],['cucumber','cucumber'],['carrot','carrot'],['avocado','avocado'],['broccoli','broccoli'],['zucchini','zucchini'],['capsicum','capsicum'],['spinach','spinach'],['lettuce','lettuce'],['banana','banana'],['apple','apple'],['berries','berr'],['yoghurt','yoghurt'],['milk','milk'],['oats','oats'],['peanut butter','peanut butter'],['beans','beans'],['chickpeas','chickpea'],['cream cheese','cream cheese']];
+/* A friendly first guess at where a dish is from. She can always change it. */
+const COUNTRY_GUESS=[
+ [/sushi|katsu|teriyaki|miso|ramen|udon|edamame|onigiri|nori/,'Japan'],
+ [/pasta|spaghetti|bolognese|lasagne|pizza|gnocchi|risotto|bruschetta|pesto|minestrone|parmigiana|carbonara|focaccia|gelato|tiramisu/,'Italy'],
+ [/taco|quesadilla|burrito|nachos|fajita|chilli|enchilada|guacamole|salsa/,'Mexico'],
+ [/souvlaki|tzatziki|greek|halloumi|moussaka|spanakopita|gyros|pita/,'Greece'],
+ [/hummus|falafel|shawarma|kofta|labneh|tabouleh/,'Lebanon'],
+ [/couscous|tagine/,'Morocco'],
+ [/butter chicken|curry|naan|biryani|dal\b|lassi|samosa|tandoori/,'India'],
+ [/satay/,'Indonesia'],
+ [/pad thai|thai|massaman/,'Thailand'],
+ [/pho\b|banh mi|summer roll|rice paper/,'Vietnam'],
+ [/kimchi|bibimbap|kimbap|bulgogi|korean/,'South Korea'],
+ [/fried rice|dumpling|chow mein|wonton|bao|stir-fry|san choy|noodle/,'China'],
+ [/schnitzel/,'Austria'],
+ [/crepe|croissant|quiche|ratatouille|croque|french/,'France'],
+ [/paella|tortilla espanola|spanish|churros|patatas|gazpacho|tapas/,'Spain'],
+ [/burger|slider|mac and cheese|pancake|waffle|hot dog/,'United States'],
+ [/fish and chips|shepherd|cottage pie|roast/,'United Kingdom'],
+ [/lamington|anzac|pavlova|vegemite|meat pie|damper|rissole|sausage roll|zucchini slice/,'Australia']
+];
+function guessCountry(name){const n=(name||'').toLowerCase();for(const r of COUNTRY_GUESS)if(r[0].test(n))return r[1];return 'Australia'}
+
+</script>
+<script>
+/* Taste Tour quiz bank (ages 10-11). T = true/false, Y = yes/no, M = multiple choice (correct answer listed first, shuffled on screen). */
+const QUIZ=[];
+const T=(q,a,x)=>QUIZ.push({t:'tf',q,o:['True','False'],c:a?0:1,x});
+const Y=(q,a,x)=>QUIZ.push({t:'yn',q,o:['Yes','No'],c:a?0:1,x});
+const M=(q,o,c,x)=>QUIZ.push({t:'mc',q,o,c,x});
+
+/* ---- Nutrition science ---- */
+M("Which of these is a macronutrient?",["Carbohydrate","Vitamin C","Iron","Calcium"],0,"Macronutrients are carbs, protein and fat. Vitamins and minerals are micronutrients.");
+M("Which macronutrient is your body's preferred quick fuel?",["Carbohydrate","Protein","Water","Fibre"],0,"Carbs are broken down into glucose, which fuels your brain and muscles.");
+T("Fat is a nutrient your body does not need.",0,"It gives energy, supports your brain and helps you absorb vitamins A, D, E and K.");
+M("Which vitamins need fat to be absorbed?",["A, D, E and K","B and C","Only C","None of them"],0,"Those are the fat-soluble vitamins.");
+M("Which vitamin helps your blood clot?",["Vitamin K","Vitamin C","Vitamin B12","Vitamin A"],0,"Leafy greens like spinach and kale are good sources.");
+M("Vitamin B12 is found mostly in:",["Animal foods and fortified foods","Fruit","Nuts only","Sugar"],0,"People who eat no animal foods need fortified foods or a supplement.");
+T("Soluble fibre is only found in meat.",0,"Oats, beans and apples are good sources.");
+M("Which food is a good source of potassium?",["Banana","White rice","Butter","Lollies"],0,"Potassium helps your muscles and heart. Potatoes and beans have lots too.");
+M("Omega-3 fats are found in:",["Salmon and walnuts","White bread","Soft drink","Rice"],0,"They support your brain and heart.");
+T("Probiotics are harmful bacteria found in yoghurt.",0,"They are friendly bacteria that support a healthy gut.");
+M("What are antioxidants?",["Plant compounds that help protect cells","A type of sugar","A kind of salt","A cooking tool"],0,"Berries, tomatoes and leafy greens are packed with them.");
+M("Which mineral is added to a lot of salt to support your thyroid?",["Iodine","Iron","Zinc","Copper"],0,"Iodine helps make thyroid hormones.");
+T("A complete protein has only two amino acids.",0,"It has all nine essential amino acids.");
+M("Which of these is a plant source of protein?",["Lentils","Lettuce","Cucumber","Apple"],0,"Lentils, beans, tofu and nuts all have protein.");
+T("Beans and rice together make a poor mix of amino acids.",0,"They complement each other well.");
+M("Which mineral helps carry oxygen in your blood?",["Iron","Calcium","Sodium","Potassium"],0,"Iron is part of haemoglobin.");
+T("Vitamin C blocks iron absorption from plant foods.",0,"It helps you absorb it. Try tomato with your beans.");
+M("Which nutrient is vital for building strong bones during childhood and teen years?",["Calcium","Sugar","Fibre","Caffeine"],0,"Most of your bone strength is built while you are growing.");
+M("What is one main job of water in your body?",["Moving nutrients and keeping you cool","Making muscles","Growing hair only","Making vitamins"],0,"It also helps your kidneys and brain work.");
+T("Fibre is only found in plant foods.",1,"Meat, eggs and dairy have none.");
+M("Which has more fibre?",["Wholemeal bread","White bread","Cheese","Butter"],0,"Wholemeal keeps the bran and germ of the grain.");
+M("Which food is a good source of folate?",["Leafy greens","Lollies","Butter","Soft drink"],0,"Folate helps your body make new cells.");
+T("Zinc has nothing to do with healing.",0,"Zinc helps your immune system and wound healing.");
+M("Which foods are top sources of zinc?",["Red meat and seeds","Cucumber","Lettuce","Apple"],0,"Zinc is a mineral your body can't store much of.");
+T("Sodium is the part of salt that your body needs in small amounts.",1,"Too much isn't good for your heart.");
+M("What gives tomatoes and red capsicums their red colour?",["Natural plant pigments","Food dye","Sugar","Salt"],0,"Carotenoids and lycopene are the pigments.");
+T("Eating a variety of colours of plants gives you a variety of nutrients.",1,"That's the idea of eating a rainbow.");
+M("Which of these is a whole grain?",["Brown rice","White rice","White bread","Cornflour"],0,"Whole grains keep all parts of the seed.");
+M("You make which vitamin when sunshine touches your skin?",["Vitamin D","Vitamin C","Vitamin A","Vitamin B12"],0,"Always combine sun with sun protection.");
+T("Calcium and vitamin D work together for strong bones.",1,"Vitamin D helps you absorb calcium.");
+M("Amino acids are the building blocks of:",["Protein","Fat","Fibre","Sugar"],0,"Your body uses them to build and repair muscles.");
+T("Your body can make all the amino acids it needs without food.",0,"Nine essential amino acids must come from food.");
+M("Which organ makes bile to help you digest fat?",["Liver","Heart","Lungs","Kidneys"],0,"Bile is stored in the gallbladder.");
+T("Most nutrients are absorbed in your small intestine.",1,"It is lined with tiny finger-like villi.");
+M("The 'per 100 g' column on a nutrition label helps you:",["Compare foods fairly","Know the price","See the farm","Find the best-before date"],0,"Serving sizes can differ, per 100 g makes it fair.");
+
+/* ---- Growing years and body fuel ---- */
+T("Growing kids and teens often need more food during growth spurts.",1,"Your body is building bones, muscle and brain connections.");
+M("Why do many girls need extra iron once periods start?",["Some iron is lost in period blood","Iron makes hair longer","Iron cools you down","Iron is a vitamin"],0,"Red meat, beans and leafy greens help, especially with vitamin C.");
+T("Skipping meals helps your brain concentrate better.",0,"Regular meals keep your brain fuelled.");
+M("What is the best drink for most sports and play?",["Water","Energy drink","Soft drink","Coffee"],0,"Water does the job for most activity.");
+T("Energy drinks are recommended for kids and teens.",0,"They contain lots of caffeine and sugar, and health experts advise against them for kids.");
+T("Sleep has no effect on hunger.",0,"Not enough sleep can make you hungrier and crave sugary foods.");
+M("About how much sleep do 9 to 13 year olds need each night?",["9 to 11 hours","4 to 5 hours","6 hours","14 hours"],0,"Sleep helps growth, mood and learning.");
+T("No single food is 'good' or 'bad'. The overall pattern of eating matters most.",1,"Variety and balance beat labels.");
+M("How can your body tell you it's hungry?",["Signals like a rumbly tummy or low energy","Only the clock","What friends are eating","Ads on your phone"],0,"Listening to hunger and fullness is a skill.");
+T("You should always finish everything on your plate, even when you are full.",0,"Eating when hungry and stopping when comfortably full is a healthy habit.");
+M("A good snack before sport is:",["A banana or toast","Lollies only","Nothing at all","An energy drink"],0,"Carbs give quick, easy fuel.");
+T("Fruit and veg contain no water.",0,"Watermelon, cucumber and oranges are mostly water.");
+M("A sign you might need water is:",["Dark yellow wee and feeling tired","Cold toes","Curly hair","Itchy ears"],0,"Pale yellow is the goal.");
+T("Calcium-rich foods include yoghurt, cheese, milk and tofu.",1,"Some canned fish with soft bones too.");
+M("Which meal gives your body fuel after a night of sleep?",["Breakfast","Dinner","Supper","Afternoon tea"],0,"The word means breaking the overnight fast.");
+T("Comparing your body or your eating to people online is a good guide for you.",0,"Everyone grows at their own pace and photos can be edited.");
+M("Who is the best person to ask about nutrition for growing?",["A doctor or dietitian","A random post","A friend's guess","An ad"],0,"They know your needs.");
+T("Cutting out whole food groups is a good idea for growing teens.",0,"Growing bodies need variety.");
+M("Which gives steadier energy through the afternoon?",["A mix of protein, fibre and carbs","Only lollies","Only a drink","Skipping lunch"],0,"Balanced meals keep you going.");
+T("Your muscles use protein to repair after exercise.",1,"That's why a snack with protein is handy after sport.");
+M("A good snack after sport is:",["Yoghurt and fruit","Lollies only","Soft drink","Nothing"],0,"Protein plus carbs.");
+T("Teens need less calcium than younger kids.",0,"Bone growth speeds up in the teen years, so they need more.");
+M("Which of these supports mood and focus?",["Regular meals, sleep, movement and water","Only caffeine","Only sugar","Skipping meals"],0,"Healthy habits work together.");
+T("Enjoying treats with friends is a normal, healthy part of life.",1,"Food is also about fun and connection.");
+M("During growth years your appetite can:",["Go up and down","Never change","Disappear","Stay the same forever"],0,"Some days you're hungrier than others.");
+M("Which of these is a great way to enjoy food with others?",["Share meals and chat","Eat alone on a screen","Skip meals","Only watch food videos"],0,"Eating together is linked with better eating habits.");
+T("Hair is mostly made of a protein called keratin.",1,"Your body builds hair from protein.");
+T("Eating a lot of protein makes hair grow overnight.",0,"Hair grows slowly. A balanced diet supports it.");
+M("Which nutrients help hair and nails stay strong as part of a balanced diet?",["Protein and iron","Only sugar","Only salt","Only water"],0,"Variety matters more than any one nutrient.");
+
+/* ---- Food media and marketing smarts ---- */
+T("A 'detox' diet is needed to clean your body.",0,"Your liver and kidneys already do that job.");
+M("What should you do if a food trend online looks risky?",["Check a trusted source and ask a grown-up","Try it straight away","Share it with everyone","Ignore the risk"],0,"Always check first.");
+T("Influencers always tell you the whole truth about products.",0,"Many are paid to promote products.");
+M("What does #ad or 'sponsored' mean?",["They were paid to promote it","It's the best product","It's free for all","It's a health claim"],0,"Paid posts can still be fun, but keep your eyes open.");
+T("'Natural' on a label always means healthy.",0,"Sugar and salt are natural too.");
+M("A 'superfood' is:",["A marketing word, not a scientific category","A food with powers","A medicine","A legal term"],0,"Lots of foods are great. No single one is magic.");
+T("One superfood can fix your whole diet.",0,"No single food can do that. Variety wins.");
+M("A product says 'sugar free'. What should you check?",["The rest of the label","Only the colour","Only the price","Nothing"],0,"It might still have lots of fat, salt or sweeteners.");
+T("Supplements are always better than eating real food.",0,"Food comes with fibre and thousands of helpful compounds.");
+M("Best first step before taking a supplement:",["Ask a doctor or pharmacist","Ask an influencer","Copy a friend","Guess"],0,"Some can be harmful in the wrong amount.");
+T("Before-and-after photos online are always unedited.",0,"Lighting, angles and filters change a lot.");
+M("What is a good sign a health claim is reliable?",["Backed by research from trusted experts","Lots of likes","A celebrity said it","A pretty photo"],0,"Look for real evidence.");
+T("Likes and views show a claim is true.",0,"Popular isn't the same as correct.");
+M("Companies use bright packaging and cartoons on foods to:",["Get kids' attention","Make the food healthier","Save money","Make it safer"],0,"Marketing is designed to grab you.");
+T("'High protein' on a snack bar means the whole bar is healthy.",0,"Check the sugar and ingredient list too.");
+M("Which is a trustworthy place for food facts in Australia?",["Eat For Health (Australian Government)","A random video","A comments section","A stranger's post"],0,"Government health sites and dietitians are reliable.");
+T("Some viral challenges, like cooking chicken in medicine, are dangerous.",1,"Never try unsafe food challenges.");
+M("Before copying a viral recipe, you should:",["Check it's safe and ask a grown-up","Just try it","Do it in secret","Dare a friend"],0,"Safety first.");
+T("A 'what I eat in a day' video shows what everyone should eat.",0,"Everyone's needs are different.");
+M("'Clean eating' is:",["A trendy phrase with no single meaning","A scientific rule","A law","A medicine"],0,"Food isn't dirty or clean. Variety is the goal.");
+T("Some accounts online promote extreme diets that are unsafe for growing bodies.",1,"If a post makes you feel bad about food or your body, tell a trusted adult.");
+M("If a post makes you feel worried about your body, a good move is to:",["Talk to a trusted adult","Follow the plan","Hide it","Copy it"],0,"You don't have to handle it alone.");
+T("Food ads on social media are only there to help you.",0,"They are designed to make you want things.");
+M("Why do snack brands sponsor sports and events?",["To link their brand with fun feelings","To make food safer","To teach nutrition","To lower prices"],0,"Marketing builds happy associations.");
+T("Ingredient lists are in random order.",0,"They are listed from most to least.");
+M("In an ingredient list, the first ingredient is:",["The one there is the most of","The one there is the least of","Random","The healthiest"],0,"It's ordered by weight.");
+T("A long list of unfamiliar ingredients always means a food is unsafe.",0,"The sugar, salt and fat levels matter most.");
+M("'Serving size' on a label tells you:",["The amount the numbers are based on","How much you must eat","What a kid must eat","The price"],0,"A packet can hold more than one serving.");
+T("A packet always contains exactly one serving.",0,"Check how many servings are in it.");
+M("A food labelled 'low fat' might:",["Have extra sugar added","Always be healthy","Have no calories","Be unsafe"],0,"Always check the whole label.");
+
+/* ---- Skin, hair and sun science ---- */
+M("What SPF is recommended for everyday sun protection in Australia?",["SPF 30 or higher","SPF 2","SPF 5","None needed"],0,"Use broad-spectrum and water-resistant sunscreen.");
+T("Sunscreen only needs to be applied once a day, even when swimming.",0,"Reapply about every 2 hours, and sooner after swimming or sweating.");
+M("'Slip, Slop, Slap, Seek, Slide' stands for:",["Clothing, sunscreen, hat, shade, sunglasses","Swim, sleep, snack","Skip, slide, sit","Salt, sugar, spice"],0,"The five ways to protect your skin.");
+T("Drinking water is important for health, but it won't instantly clear your skin.",1,"Skin care is mostly about gentle cleansing and sun protection.");
+T("Sunscreen is only needed on beach days.",0,"UV can be high even when it's cloudy.");
+M("What helps protect skin from UV the most?",["Sunscreen, hats and shade","Makeup only","Drinking water","Vitamin pills"],0,"Layer your protection.");
+T("Chocolate directly causes acne.",0,"Research hasn't clearly shown that. Acne is mostly linked to hormones, genes and oil.");
+M("What's a 'patch test' for skincare?",["Trying a tiny bit on your arm first","Washing your hands","Wearing a plaster","Testing the price"],0,"It checks for a reaction before using it on your face.");
+T("Kids need a long routine of strong active products.",0,"Simple is best: a gentle wash, moisturiser and sunscreen.");
+T("More skincare products always means better skin.",0,"More products can irritate your skin.");
+M("Why check the expiry symbol on makeup and skincare?",["Old products can grow bacteria","They taste bad","They change colour only","Nothing happens"],0,"Look for the open jar symbol with months on it.");
+T("Sharing makeup with friends is germ-free.",0,"It can spread germs. Use your own or clean applicators.");
+M("Which food groups support skin health as part of a balanced diet?",["All of them, with variety","Only sugar","Only fat","Only cheese"],0,"No single food is a skin miracle.");
+T("Vitamin C is used by your body to make collagen.",1,"Collagen helps skin and wound healing.");
+M("What protects your skin from the sun even on cloudy days?",["Sunscreen","Moisturiser alone","Lip gloss","Soap"],0,"UV passes through clouds.");
+T("Picking spots makes them heal faster.",0,"It can cause scars and spread germs.");
+M("Which is a good habit for healthy skin?",["Washing gently and getting enough sleep","Scrubbing hard","Skipping sleep","Wearing lots of products"],0,"Gentle and consistent wins.");
+T("Fragrance can irritate sensitive skin.",1,"Fragrance-free products are gentler.");
+M("Lip balm with SPF helps protect:",["Your lips from the sun","Your teeth","Your hair","Your nails"],0,"Lips burn easily.");
+T("Healthy skin comes only from products, not from sleep, water or food.",0,"Lifestyle matters too.");
+
+/* ---- Where food comes from ---- */
+M("'Food miles' means:",["How far food travels to reach you","How fast you eat","The price","The cook time"],0,"Local and seasonal food often travels less.");
+T("Seasonal produce is always more expensive.",0,"It is often fresher, tastier and cheaper.");
+M("Which fruit is typically in season in an Australian summer?",["Mango","Mandarin","Rhubarb","Pear"],0,"Mangoes love summer. Mandarins are winter fruit.");
+M("Which state grows the most sugar cane in Australia?",["Queensland","Tasmania","South Australia","Victoria"],0,"The tropical north suits sugar cane.");
+M("Where does most Australian wheat grow?",["The wheatbelt across WA, NSW, Victoria and SA","Antarctica","The rainforests","The desert only"],0,"Wheat needs cool winters and mild springs.");
+T("Tasmania is famous for cool-climate produce like apples, berries and cheese.",1,"Cool weather suits these foods.");
+M("Cacao beans are fermented and dried before being:",["Made into chocolate","Eaten raw","Turned into rice","Made into tea"],0,"Factories roast and grind them.");
+M("Which food is made by fermenting cabbage?",["Kimchi","Pasta","Tofu","Butter"],0,"Lactic acid bacteria make it tangy.");
+M("Tofu is made from:",["Soy milk","Rice","Eggs","Wheat"],0,"The milk is curdled and pressed.");
+M("Miso, a fermented soybean paste, is from:",["Japan","Mexico","Norway","Peru"],0,"It's used in miso soup.");
+T("Cheese is made by adding sugar to milk.",0,"It is made by adding bacteria and an enzyme to milk.");
+M("Chips in a packet are made by:",["Slicing potatoes and frying or baking them","Growing potato pieces","Squeezing seeds","Grinding bark"],0,"A factory slices, cooks and seasons them.");
+M("'Ultra-processed' foods usually have:",["Many added ingredients like flavours, colours and emulsifiers","Only one ingredient","Only vegetables","Only water"],0,"Plain frozen peas are not ultra-processed.");
+T("All processed foods are unhealthy.",0,"Frozen veg, tinned fish, yoghurt and wholegrain bread are processed but nutritious.");
+M("Which of these is minimally processed?",["Frozen peas","Gummy bears","Soft drink","Cheese puffs"],0,"Just picked and frozen.");
+M("Which part of the wheat grain is removed to make white flour?",["Bran and germ","The water","The shell only","Nothing"],0,"That's where the fibre is.");
+T("Coffee beans grow underground like potatoes.",0,"They are the seeds of the coffee cherry.");
+M("Tea leaves come from which plant?",["Camellia sinensis","Eucalyptus","Basil","Mint"],0,"Black, green and white tea all come from it.");
+M("Palm oil comes from:",["The fruit of oil palm trees","Coconut milk","Olives","Peanuts"],0,"It's found in many packaged foods.");
+T("Food waste has no effect on the environment.",0,"Food waste creates greenhouse gases in landfill.");
+M("A good way to waste less food is to:",["Plan meals and use leftovers","Buy extra of everything","Throw out scraps","Never check the fridge"],0,"Small habits add up.");
+M("Unit pricing on supermarket shelves helps you:",["Compare price per 100 g or litre","See the brand","Know the calories","See the farm"],0,"It makes comparing fair.");
+T("Compost turns food scraps into rich soil.",1,"Worms and microbes do the work.");
+M("Fair trade labels usually mean:",["Farmers got a fairer price and conditions","The food is organic","The food is free","The food is local"],0,"They support farmers.");
+M("A 'plant-based' diet focuses mostly on foods from:",["Plants","Animals","Factories","Seas"],0,"Fruit, veg, grains, legumes, nuts and seeds.");
+
+/* ---- Food science and kitchen know-how ---- */
+M("The Maillard reaction is:",["The browning that makes toast and roast chicken taste savoury","Water boiling","Ice melting","Sugar dissolving"],0,"Heat reacts proteins and sugars.");
+M("Caramelisation happens when you heat:",["Sugar","Salt","Water","Flour"],0,"It turns brown and nutty.");
+M("Mayonnaise is an emulsion of oil and:",["Egg yolk and acid","Milk","Butter","Honey"],0,"The yolk helps oil and water mix.");
+M("Gluten is a protein found in:",["Wheat, barley and rye","Rice","Potatoes","Corn"],0,"It gives bread its chew.");
+T("Gluten is bad for everyone.",0,"Only people with coeliac disease or a sensitivity need to avoid it.");
+M("Baking soda needs what to make bubbles?",["An acid","Heat only","Salt","Oil"],0,"Like lemon juice or yoghurt.");
+M("Baking powder is baking soda plus:",["An acid","Sugar","Salt","Flour only"],0,"So it works on its own.");
+T("Salting chopped eggplant or zucchini draws water out through osmosis.",1,"It makes them less soggy when cooked.");
+M("Yeast makes bread rise by producing:",["Carbon dioxide gas","Oxygen","Water","Salt"],0,"The bubbles get trapped in the dough.");
+T("Kneading dough makes it less chewy.",0,"It builds gluten, which makes bread chewy.");
+M("A safe fridge temperature is:",["Below 5°C","10°C","15°C","20°C"],0,"Cold slows bacteria.");
+M("The food 'danger zone' where bacteria multiply fastest is about:",["5°C to 60°C","−10°C to 0°C","60°C to 100°C","100°C to 200°C"],0,"Keep hot food hot and cold food cold.");
+T("Cooking food to the right temperature kills most harmful bacteria.",1,"Use a thermometer for meat.");
+M("To 'marinate' means to:",["Soak food in a flavoured mixture","Boil it","Freeze it","Dry it"],0,"It adds flavour and can tenderise.");
+T("Acidic marinades like lemon juice can help tenderise meat.",1,"But not for too long.");
+M("Pickling uses:",["Vinegar or brine to preserve food","Sugar only","Oil only","Ice"],0,"Acid or salt stops bacteria.");
+T("Fermentation uses tiny microbes to change food, like in yoghurt, sourdough and kimchi.",1,"It creates tangy flavours.");
+M("'Al dente' pasta is:",["Cooked but still slightly firm","Very soft","Raw","Fried"],0,"Italian for 'to the tooth'.");
+M("Why add salt to pasta water?",["To season the pasta","To make water boil colder","To stop it sticking only","To make it healthier"],0,"It's the only chance to flavour the inside.");
+T("Water boils at a lower temperature on a high mountain.",1,"There's less air pressure.");
+M("'Mise en place' means:",["Having ingredients prepared before cooking","Eating together","Cleaning up","Setting timers"],0,"French for 'everything in its place'.");
+T("A flat open hand is the safest way to hold food while chopping.",0,"Use a claw grip to tuck fingertips away.");
+M("Which knife grip protects your fingers?",["Claw grip","Fist grip","Flat hand","Pinch only"],0,"Fingertips curled back.");
+M("Why does ice cream melt faster in the sun?",["Heat energy melts the ice crystals","The sun adds sugar","It gets hungry","It dries"],0,"Warmer temperature speeds up melting.");
+T("A pinch of salt in sweet baking can make flavours taste stronger.",1,"It balances sweetness.");
+M("Which tool measures liquids best?",["A clear jug with markings","A fork","A knife","A tray"],0,"Look at it at eye level.");
+M("1 tablespoon equals about how many teaspoons?",["3","1","5","10"],0,"Three teaspoons make one tablespoon (in Australia, a tablespoon is 20 mL).");
+M("What makes pancakes fluffy?",["Bubbles from baking powder","Salt","Sugar","Ice"],0,"The bubbles expand as the pancake cooks.");
+T("You should cut meat the instant it leaves the oven for the juiciest result.",0,"Resting helps the juices redistribute.");
+M("Which chopping board rule is safest?",["Separate boards for raw meat and veg","One board for everything","Never wash boards","Use the same knife"],0,"It prevents cross-contamination.");
+
+/* ---- World cuisines and culture ---- */
+M("Ramen is a noodle soup from:",["Japan","Italy","Mexico","Spain"],0,"Ramen has regional styles across Japan.");
+M("Pho is a famous noodle soup from:",["Vietnam","Peru","Greece","Kenya"],0,"Herbs and lime are added at the table.");
+M("Pad Thai is a stir-fried noodle dish from:",["Thailand","Japan","India","Brazil"],0,"Sweet, sour and savoury.");
+M("Bibimbap is a rice bowl from:",["Korea","Sweden","Mexico","Egypt"],0,"The name means 'mixed rice'.");
+M("Tapas are small plates from:",["Spain","Norway","Fiji","Canada"],0,"They are made to share.");
+M("Paella is traditionally cooked in:",["A wide, shallow pan","A pressure cooker","A microwave","A kettle"],0,"The pan gives a crispy base called socarrat.");
+M("A tagine is a stew from:",["Morocco","Japan","Peru","Iceland"],0,"It's named after the conical pot.");
+M("Injera is a spongy flatbread from:",["Ethiopia","Italy","Mexico","Fiji"],0,"It's made from teff.");
+M("Dosa is a thin crisp pancake from:",["South India","Thailand","Peru","Greece"],0,"Made from fermented rice and lentils.");
+M("Jollof rice is a famous dish in:",["West Africa","Scandinavia","Japan","Australia"],0,"Cooked in a tomato-based sauce.");
+M("Gnocchi are small dumplings usually made from:",["Potato","Rice","Corn","Cheese"],0,"Soft, pillowy and Italian.");
+M("Crepes are thin pancakes famous in:",["France","Japan","Peru","India"],0,"Sweet or savoury fillings.");
+M("Kimchi is mainly made from:",["Fermented cabbage","Rice","Beans","Potatoes"],0,"Tangy, spicy and fizzy.");
+M("Tzatziki, a yoghurt and cucumber dip, is from:",["Greece","Japan","Peru","Fiji"],0,"Often served with souvlaki.");
+M("Which Italian cheese is aged and often grated over pasta?",["Parmesan","Cream cheese","Cottage cheese","Halloumi"],0,"It is full of umami.");
+M("Falafel are made from:",["Chickpeas or fava beans","Potatoes","Rice","Corn"],0,"Deep fried until crunchy.");
+M("Baklava is a sweet pastry made with:",["Filo pastry, nuts and syrup","Rice and milk","Chocolate and cream","Fruit only"],0,"Popular across the eastern Mediterranean.");
+M("What is 'umami'?",["The savoury fifth taste","A spice","A fish","A cooking method"],0,"Along with sweet, sour, salty and bitter.");
+M("Which food is rich in umami?",["Parmesan","Cucumber","Lettuce","Rice cake"],0,"Also mushrooms, tomatoes and soy sauce.");
+T("Chopsticks are commonly used in China, Japan and Korea.",1,"Each country has its own etiquette.");
+M("Which spice gives curry its yellow colour?",["Turmeric","Cinnamon","Pepper","Paprika"],0,"It's a root, like ginger.");
+M("Which spice comes from tree bark?",["Cinnamon","Cumin","Paprika","Turmeric"],0,"It curls into quills.");
+M("Dumplings are a popular food for luck at:",["Lunar New Year","Easter","Halloween","Anzac Day"],0,"Their shape looks like old gold ingots.");
+M("Diwali is known as the festival of:",["Lights","Snow","Harvest moons","Rivers"],0,"Sweets are shared with family and friends.");
+T("Dates are traditionally eaten to break the fast during Ramadan.",1,"They give quick natural energy.");
+M("Hummus is made mainly from:",["Chickpeas","Potatoes","Rice","Corn"],0,"With tahini, lemon and garlic.");
+M("Tempeh is a fermented food made from:",["Soybeans","Wheat","Corn","Rice"],0,"It comes from Indonesia.");
+M("Pizza Margherita is from:",["Italy","Spain","Japan","India"],0,"Tomato, mozzarella and basil.");
+M("A bao bun is:",["A soft steamed bun with fillings","A noodle","A drink","A fish"],0,"Pillowy and often filled with pork.");
+M("Empanadas are:",["Filled pastries","Soups","Drinks","Salads"],0,"Baked or fried pockets.");
+M("Mochi is made from:",["Sticky rice","Wheat","Potatoes","Corn"],0,"Pounded until stretchy.");
+M("Which is a traditional Greek salad ingredient?",["Feta","Parmesan","Cheddar","Brie"],0,"Salty and crumbly.");
+M("Churros are best known as a snack from:",["Spain","Japan","Norway","Fiji"],0,"Often dipped in thick chocolate.");
+T("Lamingtons and Anzac biscuits are Australian classics.",1,"Both have a place in Australian history.");
+M("First Nations bush foods include:",["Finger lime and wattleseed","Truffles","Maple syrup","Saffron"],0,"Native foods have been eaten for tens of thousands of years.");
+M("Which dish is Serbian?",["Cevapi","Pad Thai","Sushi","Tacos"],0,"Small grilled sausages served with flatbread.");
+M("Burek is a pastry popular in:",["The Balkans, including Serbia","Japan","Mexico","Peru"],0,"Flaky pastry with cheese or meat.");
+M("Ajvar is a spread made from:",["Roasted red capsicum","Chickpeas","Beans","Corn"],0,"A Serbian and Balkan favourite.");
+M("Which country is known for tacos and guacamole?",["Mexico","Spain","Japan","Greece"],0,"Fresh, bold flavours.");
+M("Shawarma is:",["Meat cooked on a spit and sliced thinly","A sweet","A soup","A noodle"],0,"Often served in flatbread with salad.");
+
+/* ---- Food safety and hygiene ---- */
+T("Washing raw chicken spreads bacteria around your kitchen.",1,"Cooking it properly is what makes it safe.");
+M("Which bacteria commonly cause food poisoning?",["Salmonella","Yeast","Lactobacillus","Penicillin"],0,"Cooking and good hygiene prevent it.");
+M("When should you wash your hands while cooking?",["Before cooking and after touching raw meat or eggs","Only at the end","Only when they look dirty","Never"],0,"Use soap and warm water for 20 seconds.");
+T("Leftovers should be refrigerated within about 2 hours.",1,"Germs multiply quickly at room temperature.");
+M("The safest way to thaw frozen chicken is:",["In the fridge","On the bench all day","In the sun","In a warm room"],0,"Slow and cold.");
+T("You can refreeze raw meat that has fully thawed on the bench.",0,"Thaw in the fridge if you plan to refreeze.");
+M("Which date means food might be unsafe after it?",["Use by","Best before","Packed on","Sell by"],0,"Best before is about quality.");
+T("Food past its best-before date can still be safe if stored well, but quality drops.",1,"Use by is the safety date.");
+M("Where should eggs be stored?",["In the fridge","On a sunny windowsill","In the freezer in the shell","In a warm cupboard"],0,"Cold keeps them fresh and safe.");
+T("Rinsing fruit and veg under running water is a good idea.",1,"It removes dirt and some germs.");
+M("Cross-contamination means:",["Germs moving from one food to another","Mixing flavours","Cooking twice","Cutting food small"],0,"Keep raw and cooked foods apart.");
+M("Reheated rice can cause problems if:",["It was left out too long before refrigerating","It was cooked","It was fluffed","It was salted"],0,"Bacteria spores survive cooking.");
+T("If food smells fine, it's always safe to eat.",0,"Many harmful germs don't change smell or taste.");
+M("Which should you NOT eat raw?",["Raw chicken","Carrot","Apple","Cucumber"],0,"It can carry harmful bacteria.");
+T("Cooked and raw foods should be stored separately.",1,"Raw meat goes on the bottom shelf.");
+M("A food allergy is:",["An immune reaction to a food","A dislike","Being full","A rash from soap"],0,"It can be serious.");
+T("If a friend has a nut allergy, never share food with nuts without checking.",1,"Care keeps friends safe.");
+M("Which are common major allergens?",["Peanuts, milk, eggs and shellfish","Apples and carrots","Water","Rice only"],0,"Sesame, soy, wheat and fish too.");
+T("People with allergies should always read ingredient lists.",1,"Ingredients can change.");
+M("A good way to cool a big pot of leftovers quickly is to:",["Divide it into shallow containers","Leave the pot on the stove","Cover it and leave it out","Add hot water"],0,"Smaller amounts cool faster.");
+T("Tasting food with the same spoon you stir with spreads germs.",1,"Use a clean spoon each time.");
+M("If you cut yourself in the kitchen you should:",["Wash it, cover it and tell a grown-up","Ignore it","Keep cooking","Lick it"],0,"Keep cuts clean and covered.");
+M("Oven mitts should be:",["Dry","Wet","Dripping","Oily"],0,"Wet mitts conduct heat and can burn you.");
+T("Pot handles should be turned inward so they don't get knocked.",1,"It prevents spills and burns.");
+M("If oil catches fire in a pan you should:",["Turn off the heat and cover with a lid or fire blanket","Throw water on it","Carry it outside","Blow on it"],0,"Water makes it worse.");
+
+/* ---- Taste science and trying new foods ---- */
+M("Your tongue can detect how many basic tastes?",["Five: sweet, sour, salty, bitter and umami","Two","Ten","One"],0,"Flavour is taste plus smell plus texture.");
+T("Smell is a big part of how food tastes.",1,"Pinch your nose and flavours fade.");
+T("It can take many tries before you like a new food.",1,"Research shows kids often need 10 or more tastes. Liking can grow with practice!");
+M("Tasting a new food repeatedly usually makes it:",["More familiar and often more enjoyable","Always worse","Dangerous","Irrelevant"],0,"That's called the mere exposure effect.");
+M("Why do some people find broccoli more bitter than others?",["Genes affect bitter taste sensitivity","Broccoli changes","It's old","They ate too much"],0,"Taste genes vary between people.");
+T("Taste buds renew themselves every couple of weeks.",1,"They get replaced all the time.");
+M("The chemical that makes chillies hot is:",["Capsaicin","Caffeine","Vitamin C","Lactose"],0,"It triggers heat receptors.");
+M("What helps cool your mouth after chilli?",["Milk or yoghurt","Water","Soft drink","Bread only"],0,"Dairy protein binds the capsaicin.");
+T("Texture is a big reason people dislike some foods.",1,"Try cooking foods different ways.");
+M("If you dislike boiled broccoli, a smart experiment is to:",["Try it roasted or raw","Give up forever","Eat it cold only","Boil it longer"],0,"Different cooking changes texture and taste.");
+T("Different cooking methods can change how a vegetable tastes and feels.",1,"Roasting adds sweetness and crunch.");
+M("A brave way to try a new food is:",["One small taste","Eating a huge plate","Skipping it","Hiding it"],0,"Small steps are great.");
+T("You're allowed to say 'not yet' to a food and try again another day.",1,"Liking often grows with practice.");
+M("Dipping a new food in a favourite sauce can:",["Make it easier to try","Make it unsafe","Waste it","Stop digestion"],0,"Familiar flavours help.");
+T("Pairing a new food with one you already like is a smart trick.",1,"It makes the plate feel safe.");
+M("Which of these is a texture word?",["Crunchy","Purple","Loud","Heavy"],0,"Also crispy, creamy, chewy and silky.");
+M("Which flavour word means sharp and mouth-puckering?",["Sour","Sweet","Smooth","Warm"],0,"Lemons are sour.");
+T("Looking at, smelling and touching a food are steps toward tasting it.",1,"That's the idea of a taste ladder.");
+M("The best way to describe a taste is to:",["Use flavour and texture words","Say 'ew'","Say nothing","Say 'bad'"],0,"Like creamy, tangy, crunchy or smoky.");
+T("Food neophobia, a fear of new foods, is common in kids.",1,"With practice it usually fades.");
+
+</script>
+<script>
+/* ============ helpers and state ============ */
+const KEY='tastetour.v1';
+const BUILD='Build 4 · stadium';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ds=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const todayStr=()=>ds(new Date());
+const dayOff=n=>{const d=new Date();d.setDate(d.getDate()+n);return ds(d)};
+const yesterdayStr=()=>dayOff(-1);
+const weekStartOf=d=>{const x=new Date(d);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);return ds(x)};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+const DEFAULT_LOOK={skin:'s2',hair:'long',hairc:'brown',outfit:'tee',head:'none',face:'none',ear:'none',neck:'none',lip:'natural',eye:'none',blush:'on'};
+const DEFAULT_REWARDS=()=>[
+ {id:'r1',e:'🎧',n:'Control the car playlist for a day',c:25},
+ {id:'r2',e:'🍽️',n:'Pick the family dinner',c:30},
+ {id:'r3',e:'🎬',n:'Choose family movie night',c:40},
+ {id:'r4',e:'💅',n:'New nail polish or hair accessory',c:60},
+ {id:'r5',e:'🧴',n:'A skincare treat (grown-up sets the budget)',c:90},
+ {id:'r6',e:'👯',n:'Friend sleepover',c:120},
+ {id:'r7',e:'🎟️',n:'Outing with a friend',c:160}
+];
+const freshWeek=()=>({start:weekStartOf(new Date()),tries:0,produce:0,countries:[],cooked:0,squad:0,encore:0,encoreIds:[],done:{},bonus:false});
+const defaults=()=>({
+  name:'',look:Object.assign({},DEFAULT_LOOK),artists:[],squad:[],sym:null,pin:null,spot:25,
+  date:todayStr(),balance:0,earned:0,log:[],
+  glow:{b:false,r:false,w:false},streak:0,lastStep:null,
+  trials:[],playlist:[],known:[],custom:[],mile:{},passport:{},passMile:{},prize:'A big prize you choose together with your parents 🎉',sellouts:0,
+  week:freshWeek(),treat:null,rewards:DEFAULT_REWARDS(),
+  quiz:{date:'',ids:[],i:0,right:0,done:false,bonus:false},qDeck:[],qLast:[],
+  decks:{},recent:[],notice:null
+});
+function load(){try{const r=JSON.parse(localStorage.getItem(KEY));if(r)return Object.assign(defaults(),r)}catch(e){}return defaults()}
+let S=load();
+const OLD_STOPS={jp:'Japan',it:'Italy',mx:'Mexico',gr:'Greece',me:'Lebanon',in:'India',th:'Thailand',vn:'Vietnam',kr:'South Korea',cn:'China',fr:'France',es:'Spain',af:'South Africa',au:'Australia',pr:'Australia',xx:'Australia'};
+function migrate(){
+  const fix=x=>{if(!x.country)x.country=OLD_STOPS[x.stop]||'Australia';if(!x.g)x.g=[]};
+  S.trials.forEach(fix);S.playlist.forEach(fix);
+  if(!S.week.countries)S.week.countries=[];
+  const pp={};Object.keys(S.passport||{}).forEach(k=>{pp[OLD_STOPS[k]||k]=true});S.playlist.forEach(p=>{pp[p.country]=true});S.passport=pp;
+  if(!S.passMile)S.passMile={};
+  if(!S.prize)S.prize='A big prize you choose together with your parents 🎉';
+  if(!S.sellouts)S.sellouts=0;
+  delete S.passDone;
+}
+migrate();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* ============ symbols, levels, balance ============ */
+const SYMBOLS=[['✨','sparkle','sparkles'],['💖','heart','hearts'],['⭐','star','stars'],['🎵','note','notes'],['💎','gem','gems'],['🦋','butterfly','butterflies'],['🌸','blossom','blossoms'],['👑','crown','crowns'],['🌈','rainbow','rainbows'],['💫','shooting star','shooting stars'],['🎀','bow','bows'],['🪩','disco ball','disco balls'],['🍒','cherry','cherries'],['🔥','flame','flames'],['🪐','planet','planets']];
+const sy=()=>SYMBOLS[S.sym==null?0:S.sym];
+const fmt=n=>n+' '+(n===1?sy()[1]:sy()[2]);
+const LEVEL_STEP=40;
+const level=()=>Math.min(10,Math.floor(S.earned/LEVEL_STEP)+1);
+function logIt(n,why){S.log.unshift({n,why,d:todayStr()});S.log=S.log.slice(0,40)}
+function earn(n,why){
+  const before=level();
+  S.balance+=n;S.earned+=n;logIt(n,why);save();
+  if(level()>before)setTimeout(()=>levelUp(level()),500);
+}
+function unearn(n,why){S.balance=Math.max(0,S.balance-n);S.earned=Math.max(0,S.earned-n);logIt(-n,why);save()}
+
+/* ============ avatar studio data ============ */
+const SKINS=[['s1','#FBE3D3'],['s2','#F5CDAE'],['s3','#E3A67F'],['s4','#C98B5E'],['s5','#9A6240'],['s6','#6B4128']];
+const HAIRC=[['black','#1F1A2B'],['brown','#5A3A29'],['chestnut','#8B4A2B'],['blonde','#E8C26A'],['ginger','#C8582A'],['pink','#FF7EB6'],['purple','#9B6BFF'],['blue','#4A8CFF'],['teal','#2EC4B6'],['silver','#C9CFD9']];
+const HAIRS=[['long','Long waves',1],['sleek','Sleek and straight',1],['bob','Chic bob',1],['pony','High pony',1],['buns','Space buns',1],['curly','Big curls',1],['braids','Braids',1]];
+const OUTFITS=[
+ {id:'tee',n:'Graphic tee and flare jeans',lv:1,top:'#FF8FB8',bot:'#5575B8',kind:'pants',flare:true,sleeve:'short',det:'heart',shoe:'#FFFFFF'},
+ {id:'hoodie',n:'Cosy hoodie and joggers',lv:2,top:'#A38BFF',bot:'#3B3F5C',kind:'pants',sleeve:'long',det:'hood',shoe:'#FF8FB8'},
+ {id:'denim',n:'Denim jacket and mini skirt',lv:3,top:'#FFFFFF',bot:'#F4A6C8',kind:'skirt',sleeve:'short',det:'jacket',shoe:'#FFFFFF'},
+ {id:'party',n:'Sparkle party dress',lv:4,top:'#F0407F',bot:'#F0407F',kind:'dress',sleeve:'none',det:'sparkle',shoe:'#FFC857'},
+ {id:'sport',n:'Sporty set',lv:5,top:'#2EC4B6',bot:'#2A1F4D',kind:'pants',sleeve:'short',det:'stripe',shoe:'#FFFFFF'},
+ {id:'rock',n:'Band tee, plaid skirt and boots',lv:6,top:'#2A1F4D',bot:'#C0306A',kind:'skirt',sleeve:'short',det:'star',shoe:'#2A1F4D',boot:true},
+ {id:'gown',n:'Stage gown',lv:8,top:'#8A4DFF',bot:'#8A4DFF',kind:'gown',sleeve:'none',det:'sparkle',shoe:'#FFC857'},
+ {id:'suit',n:'Superstar jumpsuit',lv:10,top:'#FFC857',bot:'#FFC857',kind:'jump',flare:true,sleeve:'long',det:'star',shoe:'#FFFFFF'}
+];
+const HEADS=[['none','None',1],['bow','Hair bow',2],['headphones','Headphones',4],['cap','Cap',5],['flowers','Flower crown',7],['tiara','Tiara',9]];
+const FACES=[['none','None',1],['glasses','Round glasses',3],['shades','Sunnies',6]];
+const EARS=[['none','None',1],['studs','Sparkle studs',2],['hoops','Hoops',5],['stars','Star earrings',8]];
+const NECKS=[['none','None',1],['choker','Choker',3],['beads','Bead necklace',6],['chain','Gold chain',9]];
+const LIPS=[['natural','Natural','#E88A8A',1],['pink','Pink','#FF6FA0',2],['berry','Berry','#B3265A',3],['coral','Coral','#FF7F6B',4],['red','Red','#D7263D',7],['gloss','Glitter gloss','#FF9ECF',9]];
+const EYES=[['none','None','',1],['lilac','Lilac','#C9A7FF',3],['blue','Blue','#8FC1FF',4],['gold','Gold','#F2C94C',6],['glitter','Pink glitter','#FF9ECF',8]];
+const BLUSHES=[['on','Blush',1],['off','No blush',1]];
+const CATS=[['skin','Skin'],['hair','Hair'],['hairc','Colour'],['outfit','Outfit'],['head','Head'],['face','Face'],['ear','Ears'],['neck','Neck'],['lip','Lips'],['eye','Eyes'],['blush','Blush']];
+function optsFor(cat){
+  const m=a=>a.map(x=>({id:x[0],label:x[1],lv:x[2]}));
+  switch(cat){
+    case 'skin':return SKINS.map(x=>({id:x[0],label:'',lv:1,sw:x[1]}));
+    case 'hairc':return HAIRC.map(x=>({id:x[0],label:'',lv:1,sw:x[1]}));
+    case 'hair':return m(HAIRS);
+    case 'outfit':return OUTFITS.map(o=>({id:o.id,label:o.n,lv:o.lv}));
+    case 'head':return m(HEADS);case 'face':return m(FACES);case 'ear':return m(EARS);case 'neck':return m(NECKS);
+    case 'lip':return LIPS.map(x=>({id:x[0],label:x[1],lv:x[3],sw:x[2]}));
+    case 'eye':return EYES.map(x=>({id:x[0],label:x[1],lv:x[3],sw:x[2]||null}));
+    case 'blush':return m(BLUSHES);
+  }
+  return [];
+}
+function unlockText(lv){
+  const out=[];
+  OUTFITS.forEach(o=>{if(o.lv===lv)out.push(o.n)});
+  [HEADS,FACES,EARS,NECKS].forEach(a=>a.forEach(x=>{if(x[2]===lv&&x[0]!=='none')out.push(x[1])}));
+  [LIPS,EYES].forEach(a=>a.forEach(x=>{if(x[3]===lv&&x[0]!=='none')out.push(x[1]+(a===LIPS?' lips':' eyeshadow'))}));
+  return out.length?out.join(', '):'a bigger stage';
+}
+
+/* ============ avatar drawing ============ */
+function adj(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=(n>>8)&255,b=n&255;const t=f<0?0:255,p=Math.abs(f);r=Math.round((t-r)*p+r);g=Math.round((t-g)*p+g);b=Math.round((t-b)*p+b);return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1)}
+const AS='stroke="#2A1F4D" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"';
+function star5(cx,cy,r,fill){let p='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*0.45:r;p+=(cx+rr*Math.cos(a)).toFixed(1)+','+(cy+rr*Math.sin(a)).toFixed(1)+' '}return `<polygon points="${p}" fill="${fill}"/>`}
+const mir=x=>240-x;
+function mirPath(d){return d.replace(/(-?\d+\.?\d*)\s(-?\d+\.?\d*)/g,(m,x,y)=>mir(+x)+' '+y)}
+function avatarSVG(look,mood,crop){
+  mood=mood||'happy';
+  const L=Object.assign({},DEFAULT_LOOK,look||{});
+  const skin=(SKINS.find(s=>s[0]===L.skin)||SKINS[1])[1];
+  const hc=(HAIRC.find(h=>h[0]===L.hairc)||HAIRC[1])[1];
+  const o=OUTFITS.find(x=>x.id===L.outfit)||OUTFITS[0];
+  const lip=(LIPS.find(l=>l[0]===L.lip)||LIPS[0])[2];
+  const eye=EYES.find(e=>e[0]===L.eye);
+  const sd=adj(skin,-0.16),hl=adj(hc,0.32),hd=adj(hc,-0.22);
+  const AH=`stroke="${adj(hc,-0.45)}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"`;
+  const both=d=>`<path d="${d}" fill="${hc}" ${AH}/><path d="${mirPath(d)}" fill="${hc}" ${AH}/>`;
+  const hiL=d=>`<path d="${d}" fill="none" stroke="${hl}" stroke-width="2.4" stroke-linecap="round" opacity=".7"/><path d="${mirPath(d)}" fill="none" stroke="${hl}" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>`;
+  /* ----- hair behind the body ----- */
+  let back='',over='';
+  switch(L.hair){
+    case 'long':
+      back=`<path d="M82 52 Q64 128 76 196 Q84 224 106 228 Q96 206 104 182 Q112 222 132 224 Q152 222 162 196 Q176 128 158 52 Q158 6 120 4 Q82 6 82 52Z" fill="${hc}" ${AH}/>`;
+      over=both('M92 64 Q76 120 84 170 Q90 196 106 204 Q96 176 102 136 Q106 96 102 74Z')+hiL('M92 100 Q86 140 92 176');break;
+    case 'sleek':
+      back=`<path d="M84 50 Q74 134 80 214 Q120 232 160 214 Q166 134 156 50 Q156 6 120 4 Q84 6 84 50Z" fill="${hc}" ${AH}/>`;
+      over=both('M92 64 Q82 126 88 198 L106 200 Q98 136 104 76Z')+hiL('M94 96 Q90 150 94 190');break;
+    case 'bob':
+      back=`<path d="M82 52 Q70 106 90 126 Q120 138 150 126 Q170 106 158 52 Q158 6 120 4 Q82 6 82 52Z" fill="${hc}" ${AH}/>`;
+      over=both('M92 66 Q82 104 96 122 Q104 104 102 76Z');break;
+    case 'pony':
+      back=`<path d="M150 22 Q214 22 206 116 Q200 160 176 142 Q188 96 152 62Z" fill="${hc}" ${AH}/><path d="M168 44 Q198 64 190 124" stroke="${hl}" stroke-width="2.4" fill="none" opacity=".7"/>`;break;
+    case 'buns':
+      back=`<circle cx="90" cy="14" r="17" fill="${hc}" ${AH}/><circle cx="150" cy="14" r="17" fill="${hc}" ${AH}/><path d="M80 12 Q90 4 100 12 M140 12 Q150 4 160 12" stroke="${hl}" stroke-width="2.4" fill="none" opacity=".7"/>`;break;
+    case 'curly':
+      back=[[84,34],[76,60],[74,88],[156,34],[164,60],[166,88],[98,14],[120,8],[142,14],[80,116],[160,116],[78,144],[162,144]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="18" fill="${hc}" ${AH}/>`).join('');break;
+    case 'braids':
+      back=`<path d="M86 52 Q78 82 84 110 L156 110 Q162 82 154 52 Q154 6 120 4 Q86 6 86 52Z" fill="${hc}" ${AH}/>`;break;
+  }
+  /* ----- legs and shoes ----- */
+  const leg=(c,flare)=>{const a=flare?'M101 182 Q99 238 102 268 Q98 306 95 338 L118 338 Q119 306 118 268 Q122 236 121 182Z':'M101 182 Q98 240 103 270 Q102 306 105 336 L117 336 Q119 306 118 268 Q122 236 121 182Z';return `<path d="${a}" fill="${c}" ${AS}/><path d="${mirPath(a)}" fill="${c}" ${AS}/>`};
+  const sneaker=(x,d)=>{const f=d<0?(v=>v):mir;return `<path d="M${f(x-2)} 334 H${f(x+17)} L${f(x+17)} 344 Q${f(x+30)} 346 ${f(x+28)} 354 H${f(x-8)} Q${f(x-12)} 344 ${f(x-2)} 334Z" fill="${o.shoe}" ${AS}/><rect x="${d<0?x-12:mir(x+30)}" y="352" width="42" height="7" rx="3.5" fill="#FFFFFF" ${AS}/>`};
+  const boot=(x,d)=>{const f=d<0?(v=>v):mir;return `<path d="M${f(x-2)} 298 H${f(x+17)} L${f(x+17)} 344 Q${f(x+30)} 346 ${f(x+28)} 354 H${f(x-8)} Q${f(x-12)} 344 ${f(x-2)} 334Z" fill="${o.shoe}" ${AS}/><rect x="${d<0?x-12:mir(x+30)}" y="352" width="42" height="7" rx="3.5" fill="#FFFFFF" ${AS}/>`};
+  const shoes=o.boot?boot(103,-1)+boot(103,1):sneaker(103,-1)+sneaker(103,1);
+  /* ----- clothes ----- */
+  const torso=c=>`<path d="M96 114 Q120 105 144 114 Q147 130 142 144 Q135 156 138 168 L147 190 Q120 198 93 190 L102 168 Q105 156 98 144 Q93 130 96 114Z" fill="${c}" ${AS}/>`;
+  let body='';
+  if(o.kind==='pants'){body=leg(o.bot,o.flare)+`<path d="M97 176 H143 L146 194 H94Z" fill="${o.bot}" ${AS}/><path d="M97 184 H143" stroke="#2A1F4D" stroke-width="2" opacity=".35"/>`+torso(o.top)}
+  else if(o.kind==='jump'){body=leg(o.top,o.flare)+`<path d="M97 176 H143 L146 194 H94Z" fill="${o.top}" ${AS}/>`+torso(o.top)+`<path d="M101 170 Q120 176 139 170" stroke="#2A1F4D" stroke-width="5" fill="none" opacity=".4"/>`}
+  else if(o.kind==='skirt'){body=leg(skin,false)+torso(o.top)+`<path d="M101 172 H139 L154 236 Q120 248 86 236 Z" fill="${o.bot}" ${AS}/><path d="M112 176 L106 240 M120 178 V244 M128 176 L134 240" stroke="#2A1F4D" stroke-width="1.8" opacity=".3"/>`}
+  else if(o.kind==='dress'){body=leg(skin,false)+`<path d="M96 114 Q120 105 144 114 Q147 130 142 144 Q135 156 139 168 L158 244 Q120 258 82 244 L101 168 Q105 156 98 144 Q93 130 96 114Z" fill="${o.top}" ${AS}/>`}
+  else {body=`<path d="M96 114 Q120 105 144 114 Q147 130 142 144 Q135 156 139 168 L168 338 Q120 356 72 338 L101 168 Q105 156 98 144 Q93 130 96 114Z" fill="${o.top}" ${AS}/><path d="M139 168 L150 262" stroke="#2A1F4D" stroke-width="1.8" opacity=".25"/>`}
+  if(o.det==='stripe')body+=`<rect x="98" y="136" width="44" height="7" fill="#FFFFFF" opacity=".92"/><path d="M103 190 L102 330 M137 190 L138 330" stroke="#FFFFFF" stroke-width="3" opacity=".9"/>`;
+  if(o.det==='star')body+=star5(120,138,10,'#FFC857');
+  if(o.det==='heart')body+=`<path d="M120 148 C108 138 112 128 120 134 C128 128 132 138 120 148Z" fill="#FFFFFF" opacity=".95"/>`;
+  if(o.det==='sparkle')body+=[[110,130],[130,142],[116,176],[104,208],[140,216],[124,240],[98,252],[132,290],[108,310]].filter(p=>o.kind==='gown'||p[1]<256).map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.2" fill="#fff"/>`).join('');
+  if(o.det==='jacket')body+=`<path d="M96 114 L112 116 L109 186 L96 188Z" fill="#6C8DD6" ${AS}/><path d="M144 114 L128 116 L131 186 L144 188Z" fill="#6C8DD6" ${AS}/>`;
+  /* ----- arms ----- */
+  const arm=side=>{
+    const f=side<0?(x=>x):mir;
+    const full=`M${f(98)} 118 Q${f(84)} 160 ${f(82)} 204`;
+    let s=`<path d="${full}" fill="none" stroke="#2A1F4D" stroke-width="13" stroke-linecap="round"/><path d="${full}" fill="none" stroke="${skin}" stroke-width="8" stroke-linecap="round"/>`;
+    if(o.sleeve!=='none'){
+      const sl=o.sleeve==='long'?`M${f(98)} 118 Q${f(85)} 158 ${f(83)} 196`:`M${f(98)} 118 Q${f(91)} 132 ${f(89)} 146`;
+      s+=`<path d="${sl}" fill="none" stroke="#2A1F4D" stroke-width="13" stroke-linecap="round"/><path d="${sl}" fill="none" stroke="${o.top}" stroke-width="8" stroke-linecap="round"/>`;
+    }
+    return s+`<ellipse cx="${f(81)}" cy="212" rx="5.5" ry="8" fill="${skin}" ${AS}/><ellipse cx="${f(81)}" cy="217" rx="2.4" ry="2.8" fill="${lip}" opacity=".9"/>`;
+  };
+  const arms=arm(-1)+arm(1);
+  /* ----- neck ----- */
+  let neck=`<path d="M113 86 L113 112 Q120 120 127 112 L127 86 Z" fill="${skin}" ${AS}/><ellipse cx="120" cy="94" rx="8" ry="5" fill="${sd}" opacity=".55"/>`;
+  if(o.det==='hood')neck+=`<path d="M98 116 Q120 102 142 116 L138 128 Q120 120 102 128Z" fill="${o.top}" ${AS}/>`;
+  else neck+=`<path d="M108 112 Q120 124 132 112" fill="none" stroke="#2A1F4D" stroke-width="2.2" stroke-linecap="round" opacity=".8"/>`;
+  neck+=`<path d="M106 117 Q112 121 118 118 M122 118 Q128 121 134 117" fill="none" stroke="${sd}" stroke-width="1.6" stroke-linecap="round" opacity=".6"/>`;
+  if(L.neck==='choker')neck+=`<path d="M113 100 Q120 106 127 100" fill="none" stroke="#2A1F4D" stroke-width="4.5" stroke-linecap="round"/>`;
+  if(L.neck==='beads')neck+=[[108,110],[112,116],[120,120],[128,116],[132,110]].map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.4" fill="${['#FF6FA0','#FFC857','#2EC4B6','#FFC857','#FF6FA0'][i]}" ${AS}/>`).join('');
+  if(L.neck==='chain')neck+=`<path d="M108 109 Q120 136 132 109" fill="none" stroke="#E0A100" stroke-width="3" stroke-linecap="round"/><circle cx="120" cy="130" r="4.2" fill="#FFC857" ${AS}/>`;
+  /* ----- head ----- */
+  const headPath='M88 52 Q87 20 120 18 Q153 20 152 52 Q152 72 139 85 Q128 96 120 97 Q112 96 101 85 Q88 72 88 52Z';
+  const head=`<ellipse cx="88" cy="58" rx="4.5" ry="8" fill="${skin}" ${AS}/><ellipse cx="152" cy="58" rx="4.5" ry="8" fill="${skin}" ${AS}/><path d="${headPath}" fill="${skin}" ${AS}/><path d="M96 82 Q120 104 144 82 Q132 94 120 95 Q108 94 96 82Z" fill="${sd}" opacity=".3"/><ellipse cx="120" cy="38" rx="14" ry="5" fill="#fff" opacity=".12"/>`;
+  let ears='';
+  if(L.ear==='studs')ears=`<circle cx="88" cy="66" r="3" fill="#FFC857" ${AS}/><circle cx="152" cy="66" r="3" fill="#FFC857" ${AS}/>`;
+  if(L.ear==='hoops')ears=`<circle cx="87" cy="74" r="7.5" fill="none" stroke="#E0A100" stroke-width="3"/><circle cx="153" cy="74" r="7.5" fill="none" stroke="#E0A100" stroke-width="3"/>`;
+  if(L.ear==='stars')ears=star5(88,72,7.5,'#FFC857')+star5(152,72,7.5,'#FFC857');
+  /* ----- face ----- */
+  let face='';
+  const shade=(eye&&eye[2])?eye[2]:null;
+  if(shade)face+=`<path d="M93 50 Q105 36 117 48 Q105 45 93 50Z" fill="${shade}" opacity=".9"/><path d="M147 50 Q135 36 123 48 Q135 45 147 50Z" fill="${shade}" opacity=".9"/>`;
+  else face+=`<path d="M93 50 Q105 38 117 48 Q105 45 93 50Z" fill="${sd}" opacity=".4"/><path d="M147 50 Q135 38 123 48 Q135 45 147 50Z" fill="${sd}" opacity=".4"/>`;
+  const iris='#5A3A2B';
+  face+=`<g class="eyes"><path d="M95 54 Q105 43 115 53 Q105 63 95 54Z" fill="#fff"/><path d="M145 54 Q135 43 125 53 Q135 63 145 54Z" fill="#fff"/><circle cx="105.5" cy="53" r="6" fill="${iris}"/><circle cx="134.5" cy="53" r="6" fill="${iris}"/><circle cx="105.5" cy="53" r="3" fill="#1B1230"/><circle cx="134.5" cy="53" r="3" fill="#1B1230"/><circle cx="108" cy="50.5" r="2" fill="#fff"/><circle cx="137" cy="50.5" r="2" fill="#fff"/><circle cx="103" cy="56.5" r="1" fill="#fff"/><circle cx="132" cy="56.5" r="1" fill="#fff"/></g>`;
+  face+=`<path d="M94 54 Q105 41 116 52" fill="none" stroke="#2A1F4D" stroke-width="3" stroke-linecap="round"/><path d="M146 54 Q135 41 124 52" fill="none" stroke="#2A1F4D" stroke-width="3" stroke-linecap="round"/><path d="M94 54 L89 50 M146 54 L151 50" stroke="#2A1F4D" stroke-width="2.6" stroke-linecap="round"/><path d="M96 50 q-3 -1 -4 -4 M101 46.5 q-2 -1 -2.5 -4.5 M107 44.5 q-1 -1 -1 -4 M144 50 q3 -1 4 -4 M139 46.5 q2 -1 2.5 -4.5 M133 44.5 q1 -1 1 -4" fill="none" stroke="#2A1F4D" stroke-width="1.7" stroke-linecap="round"/>`;
+  const bc=adj(hc,-0.05);
+  face+=mood==='sad'?`<path d="M94 41 L116 34" stroke="${bc}" stroke-width="2.2" stroke-linecap="round"/><path d="M146 41 L124 34" stroke="${bc}" stroke-width="2.2" stroke-linecap="round"/>`:`<path d="M94 40 Q105 31 116 36" fill="none" stroke="${bc}" stroke-width="2.2" stroke-linecap="round"/><path d="M146 40 Q135 31 124 36" fill="none" stroke="${bc}" stroke-width="2.2" stroke-linecap="round"/>`;
+  face+=`<path d="M120 60 Q118 68 120 70" fill="none" stroke="${adj(skin,-0.26)}" stroke-width="1.8" stroke-linecap="round"/><path d="M116 71.5 Q120 74 124 71.5" fill="none" stroke="${adj(skin,-0.25)}" stroke-width="1.6" stroke-linecap="round"/>`;
+  if(L.blush==='on')face+=`<ellipse cx="98" cy="71" rx="9" ry="5" fill="#FF8FB0" opacity=".4"/><ellipse cx="142" cy="71" rx="9" ry="5" fill="#FF8FB0" opacity=".4"/>`;
+  const lo=adj(lip,0.1),ol=adj(lip,-0.35);
+  if(mood==='sad')face+=`<path d="M108 87 Q114 80 120 82 Q126 80 132 87 Q120 84 108 87Z" fill="${lip}" stroke="${ol}" stroke-width="1.2" stroke-linejoin="round"/><path d="M108 87 Q120 84 132 87 Q126 91 120 91 Q114 91 108 87Z" fill="${lo}" stroke="${ol}" stroke-width="1.2" stroke-linejoin="round"/><path d="M99 58 q-4 8 0 11 q4 -3 0 -11z" fill="#7CC8F2"/>`;
+  else if(mood==='meh')face+=`<path d="M108 82 Q114 78 120 79 Q126 78 132 82 Q126 84 120 84 Q114 84 108 82Z" fill="${lip}" stroke="${ol}" stroke-width="1.2" stroke-linejoin="round"/><path d="M108 82 Q120 85 132 82 Q126 89 120 89 Q114 89 108 82Z" fill="${lo}" stroke="${ol}" stroke-width="1.2" stroke-linejoin="round"/>`;
+  else face+=`<path d="M107 80 Q113 75 120 77 Q127 75 133 80 Q127 83 120 83 Q113 83 107 80Z" fill="${lip}" stroke="${ol}" stroke-width="1.2" stroke-linejoin="round"/><path d="M107 80 Q113 83 120 83 Q127 83 133 80 Q130 91 120 92 Q110 91 107 80Z" fill="${lo}" stroke="${ol}" stroke-width="1.2" stroke-linejoin="round"/><ellipse cx="118" cy="86.5" rx="4" ry="1.6" fill="#fff" opacity=".55"/>${L.lip==='gloss'?'<circle cx="112" cy="86" r="1.4" fill="#fff"/><circle cx="127" cy="86" r="1.4" fill="#fff"/>':''}`;
+  /* ----- hair in front ----- */
+  let front='';
+  switch(L.hair){
+    case 'long':front=`<path d="M85 56 Q82 10 120 8 Q158 10 155 56 Q148 28 120 28 Q92 28 85 56Z" fill="${hc}" ${AH}/>`+both('M120 10 Q98 14 88 50 Q90 64 94 74 Q92 48 104 36 Q112 30 120 28Z')+hiL('M104 20 Q94 32 92 52')+`<path d="M120 12 V28" stroke="${hd}" stroke-width="2" opacity=".5"/>`;break;
+    case 'sleek':front=both('M120 8 Q90 10 86 58 Q94 36 120 26Z')+hiL('M100 16 Q90 30 90 50')+`<path d="M120 8 V26" stroke="${hd}" stroke-width="2.2" opacity=".6"/>`;break;
+    case 'bob':front=`<path d="M85 58 Q82 10 120 8 Q158 10 155 58 Q148 36 120 38 Q92 36 85 58Z" fill="${hc}" ${AH}/>`+hiL('M100 20 Q116 14 128 18');break;
+    case 'pony':front=`<path d="M86 56 Q84 10 120 8 Q156 12 154 52 Q140 24 112 34 Q96 40 86 56Z" fill="${hc}" ${AH}/><path d="M142 22 Q158 16 164 36 L148 48Z" fill="${hc}" ${AH}/><path d="M150 24 Q158 32 154 42" fill="none" stroke="#FF6FA0" stroke-width="5" stroke-linecap="round"/>`+hiL('M104 20 Q120 14 134 20');break;
+    case 'buns':front=`<path d="M86 56 Q84 10 120 8 Q156 10 154 56 Q146 30 120 30 Q94 30 86 56Z" fill="${hc}" ${AH}/>`+both('M92 58 Q86 80 92 100')+hiL('M104 18 Q120 12 136 18');break;
+    case 'curly':front=[[96,28],[112,20],[128,20],[144,28],[88,46],[152,46],[98,14],[142,14]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="14" fill="${hc}" ${AH}/>`).join('');break;
+    case 'braids':{
+      const braid=(x0,dir)=>{let s='';for(let i=0;i<7;i++){const x=x0+dir*i*0.8+(i%2?3:-3),y=108+i*13.5;s+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="8" ry="8.5" fill="${i%2?hc:adj(hc,0.14)}" ${AH}/>`}return s+`<circle cx="${(x0+dir*6).toFixed(1)}" cy="203" r="4.5" fill="#FF6FA0" ${AS}/>`};
+      over=braid(88,-1)+braid(152,1);
+      front=`<path d="M85 56 Q84 8 120 6 Q156 8 155 56 Q144 32 120 38 Q96 32 85 56Z" fill="${hc}" ${AH}/><path d="M120 8 V36" stroke="${hd}" stroke-width="2.2" opacity=".6"/>`;break}
+  }
+  /* ----- accessories ----- */
+  let acc='';
+  if(L.face==='glasses')acc+=`<circle cx="106" cy="53" r="14" fill="#ffffff" fill-opacity=".2" stroke="#2A1F4D" stroke-width="3"/><circle cx="134" cy="53" r="14" fill="#ffffff" fill-opacity=".2" stroke="#2A1F4D" stroke-width="3"/><path d="M119 52 h2" stroke="#2A1F4D" stroke-width="3"/>`;
+  if(L.face==='shades')acc+=`<g fill="#2A1F4D" ${AS}><path d="M91 42 H119 V56 Q119 66 105 66 Q91 66 91 56Z"/><path d="M149 42 H121 V56 Q121 66 135 66 Q149 66 149 56Z"/></g><path d="M119 47 h2" stroke="#2A1F4D" stroke-width="3"/><path d="M96 47 l8 0 M130 47 l8 0" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/>`;
+  if(L.head==='bow')acc+=`<g transform="translate(148 24)"><path d="M0 0 l-21 -14 v28z M0 0 l21 -14 v28z" fill="#FF6FA0" ${AS}/><circle r="5.5" fill="#FF6FA0" ${AS}/></g>`;
+  if(L.head==='headphones')acc+=`<path d="M86 52 Q84 4 120 4 Q156 4 154 52" fill="none" stroke="#2A1F4D" stroke-width="8" stroke-linecap="round"/><rect x="77" y="44" width="15" height="30" rx="7" fill="#FF6FA0" ${AS}/><rect x="148" y="44" width="15" height="30" rx="7" fill="#FF6FA0" ${AS}/>`;
+  if(L.head==='cap')acc+=`<path d="M88 40 Q86 4 120 3 Q154 4 152 40 Z" fill="#2EC4B6" ${AS}/><path d="M134 36 Q180 34 178 47 L132 45Z" fill="#2EC4B6" ${AS}/><circle cx="120" cy="5" r="3" fill="#fff"/>`;
+  if(L.head==='flowers')acc+=[[90,28,'#FF8FB8'],[103,15,'#FFC857'],[120,10,'#FF6FA0'],[137,15,'#FFC857'],[150,28,'#FF8FB8']].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="8.5" fill="${p[2]}" ${AS}/><circle cx="${p[0]}" cy="${p[1]}" r="2.8" fill="#fff"/>`).join('');
+  if(L.head==='tiara')acc+=`<path d="M96 24 L101 5 L111 15 L120 0 L129 15 L139 5 L144 24Z" fill="#FFC857" ${AS}/><circle cx="120" cy="12" r="3" fill="#FF4F9A"/>`;
+  const svg=`<svg viewBox="0 0 240 360" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${back}${body}${shoes}${arms}${neck}${over}${head}${ears}${face}${front}${acc}</svg>`;
+  return crop?svg.replace('viewBox="0 0 240 360"','viewBox="62 0 116 116"'):svg;
+}
+
+/* ============ static content ============ */
+const VENUES=[
+ {n:'Garage Jam',bg:'linear-gradient(#3A2A6B 0 58%,#6B4FA8 58% 100%)',deco:[['🎸',8,62,36],['🪩',24,6,34],['🔊',84,64,34],['✨',72,20,24]]},
+ {n:'Open Mic Café',bg:'linear-gradient(#FFD6E8 0 58%,#C79BFF 58% 100%)',deco:[['☕',8,62,30],['🎤',86,60,32],['💡',24,6,30],['🎶',72,22,26]]},
+ {n:'School Hall Gig',bg:'linear-gradient(#B7E3FF 0 58%,#8E7CE0 58% 100%)',deco:[['🎈',8,22,34],['🎈',86,26,34],['🪩',24,6,32],['🎹',8,66,32]]},
+ {n:'City Theatre',bg:'linear-gradient(#5B1F4D 0 60%,#2A1F4D 60% 100%)',deco:[['🎭',8,10,36],['💡',24,6,28],['🎭',84,10,36],['🌟',74,54,26]]},
+ {n:'Stadium Spotlight',bg:'linear-gradient(#0E1A4A 0 62%,#3B2E8C 62% 100%)',deco:[['🌟',10,14,32],['💫',74,12,32],['🎆',24,6,30],['🔦',86,54,28],['🎶',8,62,26]]}
+];
+const venue=lv=>VENUES[Math.min(4,Math.floor((lv-1)/2))];
+const STEPS=[
+ {k:'look',e:'👀',t:'Look at it',m:'Really look: colour, shape, texture',pts:1},
+ {k:'smell',e:'👃',t:'Smell it',m:'What does it smell like?',pts:1},
+ {k:'taste',e:'👅',t:'Tiny taste',m:'A nibble or a lick counts',pts:2},
+ {k:'bite',e:'🍽️',t:'Full bite',m:'One proper bite and chew it well',pts:3},
+ {k:'rate',e:'⭐',t:'Rate it',m:'Stars and flavour words for your playlist',pts:2}
+];
+const LVLABEL={1:'🌱 Easy start',2:'🔥 Adventurous',3:'🚀 Brave'};
+const TAGS=['crunchy','creamy','sweet','savoury','tangy','spicy','fresh','chewy','smoky','mild'];
+const MILES=[{n:10,t:'Opening act',p:10},{n:25,t:'Support act',p:15},{n:50,t:'Headliner',p:25}];
+const PASS_MILES=[{n:5,p:10},{n:10,p:15},{n:20,p:25}];
+const flagOf=c=>{const x=COUNTRIES.find(y=>y[0]===c);return x?x[1]:'🌍'};
+const GRP={v:'🥦 Veg',f:'🍎 Fruit',g:'🍞 Grains',p:'🍗 Protein',d:'🧀 Dairy'};
+const TYPE_LABEL={s:'Snack',b:'Breakfast',l:'Lunch',d:'Dinner',m:'Meal',p:'Fruit or veg'};
+const TREATS=[['🧁','Cupcake decorating'],['🍪','Bake cookies'],['🥤','DIY bubble tea or mocktails'],['🍕','Make-your-own pizza night'],['🍓','Chocolate-dipped fruit'],['🥞','Pancake brunch'],['🍦','Ice cream sundae bar'],['🍿','Movie night snack board'],['🧇','Waffle bar'],['🍣','Sushi rolling night']];
+const NEEDS=[['s','🥨','A snack',i=>i.t==='s'],['b','🥞','Breakfast',i=>i.t==='b'],['l','🥪','Lunch',i=>i.t==='l'],['d','🍽️','Dinner',i=>i.t==='d'],['any','🎲','Surprise me',()=>true]];
+const GLOW=[{k:'b',e:'🥣',t:'Had breakfast',pts:2},{k:'r',e:'🌈',t:'Ate a rainbow',pts:1},{k:'w',e:'💧',t:'Drank water through the day',pts:1}];
+const SQUAD_IDEAS=['Blind taste test: one friend picks, the other guesses','Host a mini tasting night with 3 new foods','Cook-off: same fridge ingredients, different recipes','Make sushi or wraps together and rate them','Bake something for each other and swap reviews'];
+
+/* ============ day and week logic ============ */
+function rollover(){
+  const t=todayStr();
+  if(S.date===t)return;
+  S.date=t;S.glow={b:false,r:false,w:false};
+  if(S.lastStep!==yesterdayStr())S.streak=0;
+  const ws=weekStartOf(new Date());
+  if(ws!==S.week.start)S.week=freshWeek();
+  save();
+}
+const inPlaylist=id=>S.playlist.find(p=>p.id===id);
+const inTrials=id=>S.trials.find(p=>p.id===id);
+const isKnown=id=>S.known.includes(id);
+function missions(){
+  const w=S.week;
+  return [
+    {id:'tries',e:'🏟️',t:'Welcome 3 new fans (new foods)',have:w.tries,need:3,pts:5},
+    {id:'produce',e:'🥬',t:'Try a new fruit or veg',have:w.produce,need:1,pts:4},
+    {id:'passport',e:'🛂',t:'Stamp a new country in your passport',have:w.countries.length,need:1,pts:5},
+    {id:'cook',e:'🧑‍🍳',t:'Cook or prepare something yourself',have:w.cooked,need:1,pts:4,btn:'cook'},
+    {id:'squad',e:'👯',t:'Taste test with a friend',have:w.squad,need:1,pts:4,btn:'squad'},
+    {id:'encore',e:'🔁',t:'Give a fan an encore (try a food again)',have:w.encore,need:1,pts:3}
+  ];
+}
+function checkMissions(){
+  const w=S.week;let any=false;
+  missions().forEach(m=>{if(m.have>=m.need&&!w.done[m.id]){w.done[m.id]=true;earn(m.pts,'Mission: '+m.t);toast('Mission complete! +'+fmt(m.pts)+' 🎯');any=true}});
+  if(Object.keys(w.done).length>=6&&!w.bonus){w.bonus=true;earn(10,'All missions complete!');setTimeout(()=>toast('Tour week complete! +'+fmt(10)+' 🏆'),1600);any=true}
+  if(any){save();fx()}
+}
+function stampCountry(c){
+  if(!c||S.passport[c])return false;
+  S.passport[c]=true;S.week.countries.push(c);
+  earn(5,'Passport stamp: '+c);
+  setTimeout(()=>toast('New passport stamp: '+flagOf(c)+' '+c),1200);
+  const n=Object.keys(S.passport).length;
+  PASS_MILES.forEach(m=>{if(n>=m.n&&!S.passMile[m.n]){S.passMile[m.n]=true;earn(m.p,m.n+' countries stamped!');setTimeout(()=>toast(m.n+' countries! +'+fmt(m.p)+' 🌏'),2200)}});
+  return true;
+}
+function checkMilestones(){
+  const n=S.playlist.length;
+  MILES.forEach(m=>{if(n>=m.n&&!S.mile[m.n]){S.mile[m.n]=true;earn(m.p,m.t+' unlocked!');setTimeout(()=>toast(m.t+'! +'+fmt(m.p)+' 🎤'),1800)}});
+  const so=Math.floor(n/100);
+  if(so>S.sellouts){const k=so-S.sellouts;S.sellouts=so;earn(50*k,'SOLD OUT stadium!');setTimeout(sellOutSheet,2200)}
+}
+function sellOutSheet(){
+  fx();
+  sheet(`<div class="center"><div style="font-size:64px">🏟️🎉</div><h2>SOLD OUT!</h2><p>${S.playlist.length} fans filled the stadium! You earned <b>${fmt(50)}</b> and a big prize:</p><div class="card sun"><b>${esc(S.prize)}</b></div><button class="big" data-a="close" style="background:var(--grass)">Wow!</button></div>`);
+}
+function addFan(f){
+  S.playlist.push({id:f.id,n:f.n,e:f.e||'🍽️',country:f.country||'Australia',lv:f.lv||1,cat:f.cat||'m',g:f.g||[],stars:f.stars||0,tags:f.tags||[],note:f.note||'',tries:1,d:todayStr(),last:todayStr(),menu:false,v:!!f.v,pts:f.pts||0});
+  S.week.tries+=1;
+  if((f.g||[]).some(x=>x==='v'||x==='f')||f.cat==='p')S.week.produce+=1;
+  stampCountry(f.country||'Australia');
+  checkMilestones();save();
+}
+function touchStreak(){
+  const t=todayStr();if(S.lastStep===t)return;
+  S.streak=(S.lastStep===yesterdayStr())?S.streak+1:1;S.lastStep=t;
+  const b={3:2,5:3,7:5,10:8}[S.streak];
+  if(b){earn(b,'Taste streak: '+S.streak+' days');setTimeout(()=>toast('Taste streak: '+S.streak+' days! +'+fmt(b)+' 🔥'),1000)}
+  save();
+}
+
+/* ============ ui plumbing ============ */
+let tab='home';
+let draft={name:'',look:Object.assign({},DEFAULT_LOOK),artists:['','',''],sym:null,step:1};
+let unlockedUntil=0;
+let qUI={mode:'idle',opts:[],picked:null};
+let studioCat='outfit';
+let recType='all',recHide=true,fridge=[],ctxStart=null,depDraft=null;
+let ideas=[],ideaCat='any';
+let petSay=null;
+let rateDraft=null;
+let pending=null;
+
+function sheet(html){document.getElementById('sheet').innerHTML=html;document.getElementById('overlay').classList.remove('hidden')}
+function hideSheet(){document.getElementById('overlay').classList.add('hidden');document.getElementById('sheet').innerHTML=''}
+function closeSheet(){hideSheet();render()}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2600)}
+function fx(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const box=document.createElement('div');box.className='fx';
+  const em=S.sym!=null?sy()[0]:'✨';
+  for(let i=0;i<18;i++){const s=document.createElement('span');s.textContent=[em,'🎵','💛','🎉'][i%4];s.style.setProperty('--x',(Math.random()*320-160)+'px');s.style.setProperty('--y',(-(Math.random()*260+120))+'px');s.style.left=(40+Math.random()*20)+'%';s.style.animationDelay=(Math.random()*.2)+'s';box.appendChild(s)}
+  document.body.appendChild(box);setTimeout(()=>box.remove(),1700);
+}
+function speak(text){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-AU';u.rate=.95;speechSynthesis.speak(u)}catch(e){}}
+function levelUp(lv){
+  fx();
+  sheet(`<div class="center"><div style="font-size:64px">🎉</div><h2>${esc(S.name||'You')} reached level ${lv}!</h2><p>New stage: <b>${venue(lv).n}</b></p><p>New in your studio: <b>${esc(unlockText(lv))}</b></p><button class="big" data-a="studio" style="background:var(--grass);margin-bottom:10px">Open my studio</button><button class="ghost" data-a="close">Later</button></div>`);
+}
+
+/* ============ grown-up PIN ============ */
+function pinPad(title,sub,onFour,shake){
+  let v='';
+  sheet(`<div class="center ${shake?'shake':''}"><h2>${title}</h2><p class="muted">${sub}</p><div class="dots" id="dots"></div><div class="pad">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(k=>k===''?'<span></span>':`<button class="key" data-k="${k}" aria-label="${k}">${k}</button>`).join('')}</div><button class="ghost" data-a="close">Cancel</button></div>`);
+  const upd=()=>{document.getElementById('dots').innerHTML=[0,1,2,3].map(i=>`<i class="${i<v.length?'on':''}"></i>`).join('')};
+  upd();
+  document.querySelectorAll('#sheet .key').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k;
+    if(k==='⌫')v=v.slice(0,-1);else if(v.length<4)v+=k;
+    upd();
+    if(v.length===4)setTimeout(()=>onFour(v),120);
+  });
+}
+function withPin(cb){
+  if(Date.now()<unlockedUntil){cb();return}
+  if(!S.pin){setupPin(cb);return}
+  askPin(cb,false);
+}
+function askPin(cb,again){
+  pinPad('Grown-up check',again?'Not quite. Try again.':'Enter the PIN to confirm',v=>{
+    if(v===S.pin){unlockedUntil=Date.now()+5*60000;hideSheet();cb()}
+    else askPin(cb,true);
+  },again);
+}
+function setupPin(cb){
+  pinPad('Set a grown-up PIN','Choose 4 digits. A grown-up uses it for spot checks and to approve rewards.',a=>{
+    pinPad('Confirm the PIN','Enter it once more',b=>{
+      if(a===b){S.pin=a;save();unlockedUntil=Date.now()+5*60000;hideSheet();if(cb)cb();else render()}
+      else setupPin(cb);
+    });
+  });
+}
+
+/* ============ views ============ */
+function header(){
+  const on=Date.now()<unlockedUntil;
+  return `<header class="top"><h1>🎧 Taste Tour</h1><span class="sp"></span>${on?'<span class="chip on">🔓</span>':''}<span class="chip sun" aria-label="Your ${esc(sy()[2])}">${sy()[0]} ${S.balance}</span><button class="iconbtn" data-a="grown" aria-label="Grown-ups">🔒</button></header>`;
+}
+function tabbar(){
+  const L=[['home','🏠','Home'],['recipes','🍳','Recipes'],['stadium','🏟️','Stadium'],['rewards','🎁','Rewards']];
+  return `<nav class="tabs"><div class="in">${L.map(t=>`<button class="tab ${tab===t[0]?'on':''}" data-a="tab" data-v="${t[0]}"><span>${t[1]}</span>${t[2]}</button>`).join('')}</div></nav>`;
+}
+
+function onboarding(){
+  const L=draft.look;
+  if(draft.step===1){
+    return `<header class="top"><h1>🎧 Taste Tour</h1></header>
+    <div class="card"><h2>Create your star</h2><p class="muted">Every new food you try is a new fan in your stadium. Fill it up and sell it out!</p>
+    <div class="onb-prev">${avatarSVG(L)}</div>
+    <h3>Your name</h3><input type="text" id="nm" data-input="name" maxlength="16" placeholder="Type your name" value="${esc(draft.name)}" autocomplete="off">
+    <h3 style="margin-top:14px">Skin</h3><div class="opts" style="margin:6px 0">${optsFor('skin').map(o=>`<button class="ob ${L.skin===o.id?'sel':''}" data-a="dset" data-v="skin" data-v2="${o.id}" aria-label="Skin ${o.id}"><span class="sw" style="background:${o.sw}"></span></button>`).join('')}</div>
+    <h3>Hair style</h3><div class="opts" style="margin:6px 0">${optsFor('hair').map(o=>`<button class="ob ${L.hair===o.id?'sel':''}" data-a="dset" data-v="hair" data-v2="${o.id}">${o.label}</button>`).join('')}</div>
+    <h3>Hair colour</h3><div class="opts" style="margin:6px 0">${optsFor('hairc').map(o=>`<button class="ob ${L.hairc===o.id?'sel':''}" data-a="dset" data-v="hairc" data-v2="${o.id}" aria-label="Hair ${o.id}"><span class="sw" style="background:${o.sw}"></span></button>`).join('')}</div>
+    <div style="height:10px"></div><button class="big" data-a="step2" style="background:var(--grass)">Next</button></div>`;
+  }
+  return `<header class="top"><h1>🎧 Taste Tour</h1></header>
+  <div class="card"><h2>Your tour soundtrack</h2><p class="muted">Who do you love listening to? These stay on this device only. You can change them any time.</p>
+  ${[0,1,2].map(i=>`<input type="text" data-input="artist${i}" maxlength="30" placeholder="Favourite artist ${i+1} (optional)" value="${esc(draft.artists[i]||'')}" style="margin-bottom:8px" autocomplete="off">`).join('')}
+  <h2 style="margin-top:14px">Pick your reward symbol</h2><p class="muted">You'll collect these for brave bites, missions and quizzes.</p>
+  <div class="syms">${SYMBOLS.map((s,i)=>`<button class="scard ${draft.sym===i?'sel':''}" data-a="picksym" data-v="${i}"><span>${s[0]}</span>${s[2]}</button>`).join('')}</div>
+  <div class="row"><button class="btn" data-a="step1">Back</button><button class="big" data-a="start" style="background:var(--grass)">Start my tour</button></div></div>`;
+}
+
+function sayNow(){
+  if(petSay)return petSay;
+  const n=S.name,h=new Date().getHours(),art=S.artists.length?pick(S.artists):null;
+  if(h<10&&!S.glow.b)return `Morning, ${n}! Fuel up with breakfast before the day gets busy.`;
+  if(S.streak>1)return `${S.streak}-day taste streak! Keep the tour going.`;
+  if(S.trials.length)return `You're mid-challenge, ${n}. Pick up where you left off!`;
+  if(art&&Math.random()<.4)return `Cook-along tip: put on ${art} and make something new.`;
+  return `Ready to welcome a new fan, ${n}? Tap me for a food quiz 🧠`;
+}
+function bubbleHTML(){
+  const q=S.quiz;
+  if(qUI.mode==='offer')return `<b>Food quiz time? 🧠</b><br>5 questions today. Each right answer earns ${fmt(1)}, and a perfect score earns a bonus!<div class="row" style="margin-top:10px"><button class="btn grass" data-a="qstart">Yes, let's go!</button><button class="btn" data-a="qlater">Later</button></div>`;
+  if(qUI.mode==='ask'||qUI.mode==='fb'){
+    const cur=QUIZ[q.ids[q.i]],fb=qUI.mode==='fb';
+    const opts=qUI.opts.map((o,k)=>{let c='';if(fb){if(o.ok)c='ok';else if(qUI.picked===k)c='no'}return `<button class="qo ${c}" data-a="qpick" data-v="${k}" ${fb?'disabled':''}>${esc(o.t)}${fb&&o.ok?' ✅':''}</button>`}).join('');
+    const last=q.i>=4;
+    return `<div class="qh"><span>Question ${q.i+1} of 5</span><button class="speak" data-a="qspeak" aria-label="Read to me">🔊</button></div><div class="qq">${esc(cur.q)}</div><div class="qopts">${opts}</div>${fb?`<p style="margin:12px 0 8px">${qUI.picked!=null&&qUI.opts[qUI.picked].ok?'<b>Correct!</b> ':'<b>Good try!</b> '}${esc(cur.x)}</p><button class="btn grass" data-a="qnext" style="width:100%">${last?'See my score':'Next question'}</button>`:''}`;
+  }
+  if(qUI.mode==='end')return `<div class="center"><div style="font-size:44px">${q.right===5?'🏆':'🎉'}</div><b>You got ${q.right} out of 5!</b><br>${q.right===5?'Perfect score! Bonus '+fmt(3)+'!':'You earned '+fmt(q.right)+'.'}<div style="margin-top:10px"><button class="btn" data-a="qdone">Done</button></div></div>`;
+  return esc(sayNow());
+}
+function side(){
+  const lv=level(),V=venue(lv),into=S.earned%LEVEL_STEP,pct=lv>=10?100:Math.round(into/LEVEL_STEP*100);
+  const toNext=lv>=10?0:LEVEL_STEP-into;
+  const deco=V.deco.map(d=>`<span class="deco" style="left:${d[1]}%;top:${d[2]}%;font-size:${d[3]}px">${d[0]}</span>`).join('');
+  const art=S.artists.length?`<p class="muted" style="margin:6px 0 0">🎶 Now playing: ${esc(S.artists[(new Date().getDate())%S.artists.length])}</p>`:'';
+  return `<div class="side"><div class="bubble" id="bubble">${bubbleHTML()}</div>
+  <div class="scene" style="background:${V.bg}">${deco}<div class="lvl">${lv}<small>level</small></div>
+    <div class="pet" data-a="petTap" role="button" aria-label="Tap your star">${avatarSVG(S.look)}</div></div>
+  <div class="card"><h3>${esc(S.name)} · ${V.n}</h3><div class="bar"><i style="width:${pct}%"></i></div>
+    <p class="muted" style="margin:8px 0 0">${lv>=10?'Top of the charts! Keep touring.':toNext+' more to level '+(lv+1)+'. Unlocks '+esc(unlockText(lv+1))+'.'}</p>${art}</div>
+  <div class="row" style="margin-bottom:20px"><button class="btn sun" data-a="studio">👗 My studio</button><button class="btn berry" data-a="need">🍽️ Need a snack idea?</button></div></div>`;
+}
+
+function trialCard(t){
+  const rungs=STEPS.map((s,i)=>{
+    let c='lock';if(i<t.done)c='done';else if(i===t.done)c='next';
+    return `<button class="rg ${c}" data-a="step" data-v="${esc(t.id)}" data-v2="${i}"><span class="ic">${s.e}</span><span><b>${s.t}</b><span class="m">${s.m}</span></span><span class="pts">+${s.pts}</span></button>`;
+  }).join('');
+  return `<div class="card"><h3>${t.e} ${esc(t.n)} <span class="lvtag l${t.lv}">${LVLABEL[t.lv]}</span></h3><p class="muted" style="margin:0">${flagOf(t.country)} ${esc(t.country)}${t.how?' · '+esc(t.how):''}</p><div class="ladder">${rungs}</div><div style="margin-top:8px"><button class="ghost" data-a="drop" data-v="${esc(t.id)}">Not today</button></div></div>`;
+}
+function weekCard(){
+  const ms=missions(),done=Object.keys(S.week.done).length;
+  const dow=new Date().getDay(),weekend=dow===5||dow===6||dow===0;
+  const mine=S.treat&&S.treat.week===S.week.start?S.treat.item:null;
+  let treat;
+  if(mine)treat=`<p><b>This week's weekend treat: ${esc(mine)}</b><br><span class="muted">Plan a time to make it together!</span></p>`;
+  else if(done>=4&&weekend)treat=`<button class="big" data-a="treatopen" style="background:var(--grass)">🧁 Pick your weekend treat</button>`;
+  else if(done>=4)treat=`<p><b>Weekend treat unlocked! 🎉</b><br><span class="muted">Pick it on Friday, Saturday or Sunday.</span></p>`;
+  else treat=`<p class="muted">Finish 4 missions to unlock a weekend treat to make together. ${done} of 4 so far.</p>`;
+  return `<div class="card pink"><h3>🎯 Weekly Tour Missions</h3>
+  ${ms.map(m=>{const ok=m.have>=m.need;return `<div class="mrow ${ok?'ok':''}"><span class="e">${m.e}</span><span class="t"><b>${esc(m.t)}</b><br><span class="muted">${Math.min(m.have,m.need)} of ${m.need} · +${m.pts} ${sy()[0]}</span></span>${ok?'<span>✅</span>':m.btn==='cook'?'<button class="btn sm" data-a="cook">I did it</button>':m.btn==='squad'?'<button class="btn sm" data-a="squad">Log it</button>':''}</div>`}).join('')}
+  <div class="bar" style="margin:10px 0"><i style="width:${Math.min(100,Math.round(done/4*100))}%"></i></div>${treat}</div>`;
+}
+function squadCard(){
+  return `<div class="card"><h3>👯 Your squad</h3><p class="muted">Add friends' names (or nicknames). They stay on this device only.</p>
+  <div class="chips">${S.squad.length?S.squad.map((n,i)=>`<span class="chip">${esc(n)} <button class="link" data-a="sqdel" data-v="${i}" aria-label="Remove ${esc(n)}">✕</button></span>`).join(''):'<span class="muted">No friends added yet.</span>'}</div>
+  <div class="row"><input type="text" id="sqname" maxlength="16" placeholder="Friend's name" autocomplete="off"><button class="btn grass" data-a="sqadd">Add</button></div>
+  <div class="row" style="margin-top:10px"><button class="btn sun" data-a="squad">Log a squad taste test</button></div>
+  <details><summary>Squad challenge ideas</summary><div class="in">${SQUAD_IDEAS.map(x=>`<p>• ${x}</p>`).join('')}</div></details></div>`;
+}
+function viewHome(){
+  const notice=S.notice?`<div class="card sun"><b>${esc(S.notice)}</b><br><button class="ghost" data-a="dismiss">Got it</button></div>`:'';
+  return `${notice}
+  <div class="card"><h3>✨ Daily Glow</h3><p class="muted">Quick self check-in. Tap what you did today.</p>
+    <div class="glow">${GLOW.map(g=>`<button class="gl ${S.glow[g.k]?'on':''}" data-a="glow" data-v="${g.k}"><span>${g.e}</span>${g.t}<br><small>+${g.pts}</small></button>`).join('')}</div>
+    <p class="muted" style="margin:10px 0 0">${S.streak>0?'🔥 Taste streak: '+S.streak+' day'+(S.streak===1?'':'s')+' (bonus at 3, 5, 7 and 10)':'Do one ladder step today to start a taste streak.'}</p></div>
+  <h2 style="margin:4px 2px 10px">Your Taste Ladder</h2>
+  ${S.trials.length?S.trials.map(trialCard).join(''):`<div class="card mint"><b>No challenge in progress.</b><p class="muted" style="margin:6px 0 10px">Pick a new food from the Recipe Bank, or see what is in the fridge. Start with a look and a sniff, and go as far as you like.</p><div class="row"><button class="btn grass" data-a="tab" data-v="recipes">Browse recipes</button><button class="btn sun" data-a="surprise">🎲 Surprise me</button></div></div>`}
+  ${weekCard()}${squadCard()}
+  <p class="muted center" style="margin:4px 0 20px">Taste Tour · ${BUILD}</p>`;
+}
+
+/* ----- recipe bank ----- */
+function recipeItem(it){
+  const pl=inPlaylist(it.id),tr=inTrials(it.id);
+  let act;
+  if(pl)act=`<p><b>🏟️ A fan already!</b> ${'★'.repeat(pl.stars)}${'☆'.repeat(5-pl.stars)}</p><button class="btn sm" data-a="encore" data-v="${it.id}">🔁 Encore</button>`;
+  else if(tr)act=`<p><b>In progress on your ladder.</b></p>`;
+  else act=`<div class="row"><button class="btn grass" data-a="startitem" data-v="${it.id}">Start challenge</button><button class="btn" data-a="known" data-v="${it.id}">I already eat this</button></div>`;
+  const tags=it.g.map(g=>`<span class="tag">${GRP[g]}</span>`).join('');
+  return `<details data-name="${esc((it.n+' '+it.pan).toLowerCase())}"><summary>${it.e} ${esc(it.n)}${it._m?` <span class="lvtag">${it._m} in fridge</span>`:''}${pl?' ✅':''}</summary><div class="in"><p>${esc(it.how)}</p><p class="muted"><b>🧊 You will need:</b> ${esc(it.pan)}${it.adult?'<br><b>Ask a grown-up to help.</b>':''}</p><p>${tags}<span class="tag">${TYPE_LABEL[it.t]}</span></p>${act}</div></details>`;
+}
+function viewRecipes(){
+  let list=RECIPES.filter(r=>recType==='all'||r.t===recType);
+  if(recHide)list=list.filter(r=>!isKnown(r.id)&&!inPlaylist(r.id));
+  if(fridge.length)list=list.map(r=>({r,m:fridge.filter(k=>r.pan.toLowerCase().includes(k)).length})).filter(x=>x.m>0).sort((a,b)=>b.m-a.m).map(x=>Object.assign({},x.r,{_m:x.m}));
+  const T2=[['all','All'],['s','Snacks'],['b','Breakfast'],['l','Lunch'],['d','Dinner']];
+  return `<h2 style="margin:4px 2px 4px">🍳 Recipe Bank</h2><p class="muted" style="margin:0 2px 10px">${RECIPES.length} ideas made from fridge and pantry staples. Pick one you have never tried and start a challenge!</p>
+  <div class="row" style="margin-bottom:10px"><button class="btn sun" data-a="surprise">🎲 Surprise me</button><button class="btn" data-a="custom">➕ Add my own</button></div>
+  <details ${fridge.length?'open':''}><summary>🧊 What's in the fridge? ${fridge.length?'('+fridge.length+' picked)':''}</summary><div class="in"><p class="muted">Tick what you have and the recipes will line up.</p>
+    <div class="chips">${ING.map(g=>`<button class="fchip ${fridge.includes(g[1])?'on':''}" data-a="fridge" data-v="${g[1]}">${g[0]}</button>`).join('')}</div>
+    ${fridge.length?`<button class="btn sm" data-a="fridgeclear">Clear ingredients</button>`:''}</div></details>
+  <input type="text" id="mq" data-input="mq" placeholder="Search recipes or ingredients" autocomplete="off" style="margin:10px 0">
+  <div class="chips">${T2.map(t=>`<button class="fchip ${recType===t[0]?'on':''}" data-a="rtype" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>
+  <label style="display:flex;gap:10px;align-items:center;margin:0 0 12px;font-weight:700"><input type="checkbox" data-change="hide" ${recHide?'checked':''} style="width:24px;height:24px"> Hide foods I already eat or have tried</label>
+  ${list.length?`<p class="muted" style="margin:0 2px 8px">${list.length} recipe${list.length===1?'':'s'}</p><div class="grid2 bankwrap">${list.map(recipeItem).join('')}</div>`:'<p class="muted">Nothing matches. Try different ingredients or filters!</p>'}`;
+}
+
+/* ----- stadium ----- */
+function stadiumSVG(cur){
+  const ink='#2A1F4D',ff='font-family="ui-rounded,system-ui,sans-serif"',sold=cur>=100;
+  const inner=avatarSVG(S.look).replace(/^<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');
+  const rows=[12,14,16,18,20,20],pos=[];
+  rows.forEach((cnt,r)=>{for(let j=0;j<cnt;j++){const a=(15+j/(cnt-1)*150)*Math.PI/180,rx=70+r*26,ry=22+r*17;pos.push({x:200+rx*Math.cos(a),y:152+ry*Math.sin(a),r,d:Math.abs(j/(cnt-1)-0.5)})}});
+  const order=pos.map((p,i)=>i).sort((a,b)=>pos[a].r-pos[b].r||pos[a].d-pos[b].d);
+  const rank={};order.forEach((idx,k)=>rank[idx]=k);
+  const cols=['#FF6FA0','#FFC857','#2EC4B6','#A38BFF','#FF8F6B','#6FD3FF'];
+  const crowd=pos.map((p,i)=>{const on=rank[i]<cur;return on?`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="5.4" fill="${cols[i%6]}" stroke="${ink}" stroke-width="1.4"/><circle cx="${(p.x-1.5).toFixed(1)}" cy="${(p.y-1.6).toFixed(1)}" r="1.1" fill="#fff" opacity=".8"/>`:`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.6" fill="#ffffff" fill-opacity=".14" stroke="#ffffff" stroke-opacity=".35" stroke-width="1"/>`}).join('');
+  const rings=[0,1,2,3,4,5].map(r=>`<path d="M${200-(70+r*26)-12} 152 Q200 ${152+(22+r*17)*2.1} ${200+(70+r*26)+12} 152" fill="none" stroke="#6B58C9" stroke-width="1.5" opacity=".5"/>`).join('');
+  const stars=[[30,20],[80,40],[330,26],[370,60],[300,12],[56,66],[352,100]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="1.8" fill="#fff" opacity=".8"/>`).join('');
+  const beams=cur>0?`<polygon points="46,0 78,0 196,150 128,150" fill="#fff" opacity=".12"/><polygon points="354,0 322,0 204,150 272,150" fill="#fff" opacity=".12"/>`:'';
+  return `<svg viewBox="0 0 400 322" role="img" aria-label="Stadium with ${cur} of 100 fans" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B1247"/><stop offset="1" stop-color="#4B3AA8"/></linearGradient><linearGradient id="ledg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF4F9A"/><stop offset="1" stop-color="#7B5CFF"/></linearGradient></defs>
+  <rect x="0" y="0" width="400" height="322" rx="18" fill="url(#skyg)"/>${stars}${beams}
+  <rect x="14" y="26" width="10" height="86" rx="3" fill="#2A1F4D"/><circle cx="19" cy="24" r="9" fill="#FFE9A8" opacity=".95"/><rect x="376" y="26" width="10" height="86" rx="3" fill="#2A1F4D"/><circle cx="381" cy="24" r="9" fill="#FFE9A8" opacity=".95"/>
+  ${rings}
+  <rect x="108" y="74" width="184" height="78" rx="8" fill="#2A1F4D" stroke="#6B58C9" stroke-width="3"/>
+  <rect x="126" y="82" width="148" height="46" rx="6" fill="url(#ledg)"/>
+  <path d="M136 92 l4 0 M146 100 l6 0 M250 94 l5 0 M240 104 l4 0" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/>
+  <rect x="120" y="140" width="160" height="12" rx="3" fill="#6B58C9"/>
+  <g transform="translate(176 80) scale(.2)">${inner}</g>
+  <rect x="136" y="52" width="128" height="20" rx="10" fill="${sold?'#FFC857':'#FF4F9A'}" stroke="${ink}" stroke-width="2.5"/><text x="200" y="67" font-size="13" font-weight="900" text-anchor="middle" fill="${sold?ink:'#fff'}" ${ff}>${sold?'SOLD OUT':'TASTE TOUR'}</text>
+  ${crowd}
+  ${sold?'<text x="46" y="52" font-size="26">🎆</text><text x="326" y="52" font-size="26">🎇</text><text x="196" y="40" font-size="22">✨</text>':''}
+  <rect x="100" y="290" width="200" height="26" rx="13" fill="#1FB5A5" stroke="${ink}" stroke-width="3"/><text x="200" y="308" font-size="15" font-weight="800" text-anchor="middle" fill="#fff" ${ff}>${cur} / 100 fans${S.sellouts?' · '+S.sellouts+' sell-out'+(S.sellouts===1?'':'s'):''}</text>
+  </svg>`;
+}
+function fanCard(p){
+  return `<div class="card" style="padding:12px 14px"><div class="mrow" style="border:0;padding:0"><span class="e">${p.e}</span><span class="t"><b>${esc(p.n)}</b><br><span class="stars">${'★'.repeat(p.stars)}${'☆'.repeat(5-p.stars)}</span> <span class="muted">${flagOf(p.country)} ${esc(p.country)} · tried ${p.tries}×${p.v?' · ✔ checked':''}</span></span><span class="mini">${avatarSVG(S.look,p.stars>=4?'happy':p.stars>=2?'meh':p.stars>=1?'sad':'meh',true)}</span></div>
+  ${p.tags.length?`<div style="margin-top:6px">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>`:''}${p.note?`<p class="muted" style="margin:4px 0 0">“${esc(p.note)}”</p>`:''}
+  <div class="row" style="margin-top:8px"><button class="btn sm" data-a="encore" data-v="${esc(p.id)}">🔁 Encore</button><button class="btn sm" data-a="rerate" data-v="${esc(p.id)}">⭐ Rate</button><button class="btn sm" data-a="recountry" data-v="${esc(p.id)}">🌍 Country</button><button class="btn sm ${p.menu?'grass':''}" data-a="menu" data-v="${esc(p.id)}">${p.menu?'On my menu ✓':'Add to my menu'}</button></div></div>`;
+}
+function viewStadium(){
+  const n=S.playlist.length,cur=(n>0&&n%100===0)?100:n%100;
+  const next=MILES.find(m=>n<m.n),pct=cur;
+  const stamped=Object.keys(S.passport),nc=stamped.length;
+  const cnt=c=>S.playlist.filter(p=>p.country===c).length;
+  const nextPass=PASS_MILES.find(m=>nc<m.n);
+  return `<div class="card stadium">${stadiumSVG(cur)}</div>
+  <button class="big" data-a="deposit" style="background:var(--grass);margin-bottom:18px">🎤 Welcome a new fan (add a new food)</button>
+  <div class="card sun"><h3>🏟️ Fill the stadium!</h3><div class="bar"><i style="width:${pct}%"></i></div>
+    <p class="muted" style="margin:8px 0 10px">Every new food is a new fan. Reach <b>100 fans</b> and the stadium <b>sells out</b> for ${fmt(50)} and a big prize!${next?' Next: '+next.t+' at '+next.n+' fans (+'+next.p+' '+sy()[0]+').':''}</p>
+    ${MILES.map(m=>`<div class="mrow ${S.mile[m.n]?'ok':''}" style="padding:6px 0"><span class="e" style="font-size:22px">${S.mile[m.n]?'✅':'🎤'}</span><span class="t"><b>${m.t}</b> <span class="muted">· ${m.n} fans · +${m.p} ${sy()[0]}</span></span></div>`).join('')}
+    <div class="mrow" style="padding:6px 0"><span class="e" style="font-size:22px">${S.sellouts?'🏆':'🎟️'}</span><span class="t"><b>SOLD OUT</b> <span class="muted">· 100 fans · +50 ${sy()[0]} and the prize</span></span></div>
+    <p style="margin:8px 0 0"><b>🎁 Sell-out prize:</b> ${esc(S.prize)}</p></div>
+  <div class="card mint"><h3>🛂 Your Passport</h3><p class="muted">When you add a new food, choose the country it is from to stamp your passport (+5 ${sy()[0]} for each new country). ${nc} stamp${nc===1?'':'s'}${nextPass?' · '+(nextPass.n-nc)+' more for a bonus of +'+nextPass.p+' '+sy()[0]:''}.</p>
+  <div class="passgrid">${nc?stamped.map(c=>`<div class="pp on"><span>${flagOf(c)}</span>${esc(c)}<small>${cnt(c)} food${cnt(c)===1?'':'s'}</small></div>`).join(''):''}${Array.from({length:Math.max(0,3-nc)},()=>`<div class="pp"><span>🌍</span>Next stamp<small>?</small></div>`).join('')}</div></div>
+  <h2 style="margin:4px 2px 10px">Your fans (new foods)</h2>
+  ${n?S.playlist.slice().reverse().map(fanCard).join(''):'<div class="card"><p class="muted" style="margin:0">The stadium is empty. Try something new and welcome your first fan!</p></div>'}`;
+}
+
+/* ----- rewards ----- */
+function viewRewards(){
+  return `<div class="card sun"><h3>${sy()[0]} Your ${esc(sy()[2])}</h3><div class="bigbal">${S.balance}</div><p class="muted" style="margin:0">${S.earned} earned so far</p></div>
+  <div class="card"><h3>🎁 Rewards shop</h3>${S.rewards.length?S.rewards.map(r=>`<div class="reward"><span class="e">${r.e}</span><span class="t"><b>${esc(r.n)}</b><br><span class="muted">${sy()[0]} ${r.c}</span></span><button class="btn ${S.balance>=r.c?'sun':''}" data-a="buy" data-v="${r.id}" ${S.balance>=r.c?'':'disabled'}>Get it</button></div>`).join(''):'<p class="muted">No rewards yet. A grown-up can add some.</p>'}
+    <div style="margin-top:12px"><button class="btn" data-a="rewardsmgr">Grown-ups: manage rewards</button></div></div>
+  <div class="card"><h3>Recent activity</h3>${S.log.length?S.log.slice(0,10).map(l=>`<div class="logrow"><span>${esc(l.why)}</span><b>${l.n>0?'+':''}${l.n} ${sy()[0]}</b></div>`).join(''):'<p class="muted">Nothing yet.</p>'}</div>`;
+}
+
+const views={home:viewHome,recipes:viewRecipes,stadium:viewStadium,rewards:viewRewards};
+function render(){
+  rollover();
+  const app=document.getElementById('app');
+  if(!S.name){app.innerHTML=onboarding();return}
+  app.innerHTML=header()+`<div class="layout ${tab==='home'?'home-tab':''}">${side()}<main>${views[tab]()}</main></div>`+tabbar();
+}
+
+/* ============ quiz ============ */
+function drawQuiz(){
+  if(S.qDeck.length<5){
+    const recent=S.qLast.slice(-20);
+    S.qDeck=S.qDeck.concat(shuffle(QUIZ.map((_,i)=>i).filter(i=>!recent.includes(i)&&!S.qDeck.includes(i))));
+  }
+  const ids=S.qDeck.splice(0,5);
+  S.qLast=S.qLast.concat(ids).slice(-60);
+  return ids;
+}
+function ensureQuiz(){if(S.quiz.date!==todayStr()){S.quiz={date:todayStr(),ids:drawQuiz(),i:0,right:0,done:false,bonus:false};save()}}
+function setOpts(){
+  const cur=QUIZ[S.quiz.ids[S.quiz.i]];
+  const o=cur.o.map((t,i)=>({t,ok:i===cur.c}));
+  qUI.opts=cur.t==='mc'?shuffle(o):o;qUI.picked=null;
+}
+
+/* ============ ladder logic ============ */
+function startTrial(it){
+  if(inPlaylist(it.id)){toast('Already a fan! Try an encore.');return}
+  if(inTrials(it.id)){toast('Already on your ladder');tab='home';render();return}
+  if(S.trials.length>=6){toast('Finish or drop a challenge first (6 at a time)');return}
+  S.trials.push({id:it.id,n:it.n,e:it.e,country:it.country||'Australia',lv:it.lv||1,t:it.t||'m',g:it.g||[],how:it.how||'',pan:it.pan||'',done:0,started:todayStr(),pts:0,_v:null});
+  save();fx();hideSheet();tab='home';render();window.scrollTo(0,0);
+  toast('Challenge started: '+it.n+' '+it.e);
+}
+function finishBite(t){
+  if(inPlaylist(t.id))return;
+  const brave=t.lv===2?2:t.lv===3?4:0;
+  if(brave){earn(brave,'Brave bonus: '+t.n);t.pts+=brave}
+  addFan({id:t.id,n:t.n,e:t.e,country:t.country,lv:t.lv,cat:t.t,g:t.g,v:t._v,pts:t.pts});
+  fx();
+  setTimeout(()=>toast('A new fan joined your stadium! 🏟️'),300);
+}
+function countryOptions(sel){return COUNTRIES.map(c=>`<option value="${esc(c[0])}" ${c[0]===sel?'selected':''}>${c[1]} ${esc(c[0])}</option>`).join('')+'<option value="__other">🌍 Other (type it)</option>'}
+function readCountry(){
+  const sel=document.getElementById('cty');if(!sel)return 'Australia';
+  if(sel.value==='__other'){const v=(document.getElementById('ctyo').value||'').trim();return v||''}
+  return sel.value;
+}
+function countryPick(sel){return `<select id="cty" data-change="cty">${countryOptions(sel)}</select><input type="text" id="ctyo" maxlength="24" placeholder="Type the country" style="margin-top:8px;display:none" autocomplete="off">`}
+function startSheet(it){
+  ctxStart=it;
+  sheet(`<div class="center"><div style="font-size:56px">${it.e}</div><h2>${esc(it.n)}</h2></div>
+  <h3>Where is this food from?</h3>${countryPick(guessCountry(it.n))}
+  <h3 style="margin-top:14px">How brave does it feel?</h3>
+  <div class="row"><button class="btn" data-a="sgo" data-v="1">🌱 Easy</button><button class="btn" data-a="sgo" data-v="2">🔥 Adventurous</button><button class="btn" data-a="sgo" data-v="3">🚀 Brave</button></div>
+  <div class="center"><button class="ghost" data-a="close">Cancel</button></div>`);
+}
+function syncDep(){
+  const d=depDraft;if(!d)return;
+  const n=document.getElementById('dname');if(n)d.n=n.value;
+  const c=readCountry();if(c)d.country=c;
+  const t=document.getElementById('dnote');if(t)d.note=t.value;
+}
+function depositSheet(){
+  const d=depDraft;
+  const known=COUNTRIES.some(c=>c[0]===d.country);
+  sheet(`<h2>🎤 Welcome a new fan</h2><p class="muted">Tried something new? Type it in, choose the country it is from, and rate it.</p>
+  <input type="text" id="dname" maxlength="40" placeholder="What did you try?" value="${esc(d.n)}" autocomplete="off" style="margin-bottom:10px">
+  <h3>Where is it from?</h3>${countryPick(known?d.country:'__other')}
+  <h3 style="margin-top:12px">What kind of food?</h3><div class="chips">${[['m','Meal'],['s','Snack'],['p','Fruit or veg'],['d','Sweet'],['b','Breakfast']].map(c=>`<button class="fchip ${d.cat===c[0]?'on':''}" data-a="dcat" data-v="${c[0]}">${c[1]}</button>`).join('')}</div>
+  <h3>How brave was it?</h3><div class="chips"><button class="fchip ${d.lv===1?'on':''}" data-a="dlv" data-v="1">🌱 Easy</button><button class="fchip ${d.lv===2?'on':''}" data-a="dlv" data-v="2">🔥 Adventurous</button><button class="fchip ${d.lv===3?'on':''}" data-a="dlv" data-v="3">🚀 Brave</button></div>
+  <h3>Your rating</h3><div>${[1,2,3,4,5].map(i=>`<button class="starbtn ${d.stars>=i?'on':''}" data-a="dstar" data-v="${i}" aria-label="${i} stars">★</button>`).join('')}</div>
+  <h3>Your review (optional)</h3><input type="text" id="dnote" maxlength="80" placeholder="e.g. Creamy and a bit tangy" value="${esc(d.note)}" autocomplete="off">
+  <div style="height:12px"></div><button class="big" data-a="dgo" style="background:var(--grass)">Add my fan 🎤</button><div class="center"><button class="ghost" data-a="close">Cancel</button></div>`);
+  if(!known){const o=document.getElementById('ctyo');if(o){o.style.display='block';o.value=d.country}}
+}
+function doDeposit(verified){
+  const d=depDraft;if(!d)return;
+  const id=d.n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||('c_'+Date.now());
+  if(inPlaylist(id)){toast('Already a fan! Try an encore.');return}
+  const brave=d.lv===2?2:d.lv===3?4:0;
+  earn(3+brave,'New fan: '+d.n);
+  S.trials=S.trials.filter(t=>t.id!==id);
+  const g=d.cat==='p'?['v']:[];
+  addFan({id,n:d.n,e:({m:'🍽️',s:'🥨',p:'🥬',d:'🍰',b:'🥞'})[d.cat]||'🍽️',country:d.country,lv:d.lv,cat:d.cat,g,stars:d.stars,tags:[],note:d.note,v:verified,pts:3+brave});
+  depDraft=null;fx();hideSheet();render();checkMissions();touchStreak();
+  toast('A new fan joined! +'+fmt(3+brave)+' 🏟️');
+}
+function applyStep(t,idx){
+  const st=STEPS[idx];
+  t.done=idx+1;t.pts=(t.pts||0)+st.pts;
+  earn(st.pts,st.t+': '+t.n);touchStreak();
+  if(idx===3)finishBite(t);
+  save();render();checkMissions();
+}
+function rateSheet(){
+  const r=rateDraft;
+  sheet(`<div class="center"><h2>Rate it ⭐</h2><p class="muted">${esc(r.n)}</p><div>${[1,2,3,4,5].map(i=>`<button class="starbtn ${r.stars>=i?'on':''}" data-a="rstar" data-v="${i}" aria-label="${i} stars">★</button>`).join('')}</div></div>
+  <h3>Flavour words (pick up to 3)</h3><div class="chips">${TAGS.map(t=>`<button class="fchip ${r.tags.includes(t)?'on':''}" data-a="rtag" data-v="${t}">${t}</button>`).join('')}</div>
+  <h3>Your review (optional)</h3><input type="text" id="rnote" maxlength="80" placeholder="e.g. Crunchy outside, soft inside" value="${esc(r.note)}" autocomplete="off">
+  <div style="height:12px"></div><button class="big" data-a="rsave" style="background:var(--grass)">Save review</button><div class="center"><button class="ghost" data-a="close">Cancel</button></div>`);
+}
+function studioSheet(){
+  const opts=optsFor(studioCat),cur=S.look[studioCat],lv=level();
+  sheet(`<div class="center"><h2>👗 My studio</h2><div class="studio-prev">${avatarSVG(S.look)}</div></div>
+  <div class="chips">${CATS.map(c=>`<button class="fchip ${studioCat===c[0]?'on':''}" data-a="scat" data-v="${c[0]}">${c[1]}</button>`).join('')}</div>
+  <div class="opts">${opts.map(o=>{const lock=o.lv>lv;return `<button class="ob ${cur===o.id?'sel':''} ${lock?'lock':''}" data-a="sset" data-v="${o.id}">${o.sw?`<span class="sw" style="background:${o.sw}"></span>`:''}${o.label}${lock?`<small>🔒 Level ${o.lv}</small>`:''}</button>`}).join('')}</div>
+  <h3>Your name</h3><input type="text" id="pname" maxlength="16" value="${esc(S.name)}" autocomplete="off" style="margin-bottom:10px">
+  <h3>Favourite artists</h3>${[0,1,2].map(i=>`<input type="text" id="part${i}" maxlength="30" placeholder="Artist ${i+1}" value="${esc(S.artists[i]||'')}" style="margin-bottom:8px" autocomplete="off">`).join('')}
+  <div style="height:8px"></div><button class="big" data-a="studiodone" style="background:var(--grass)">Done</button>`);
+}
+
+/* ============ hungry / ideas ============ */
+function ideaPool(cat){
+  const need=NEEDS.find(n=>n[0]===cat)||NEEDS[4];
+  return RECIPES.filter(i=>need[3](i)&&!isKnown(i.id)&&!inPlaylist(i.id)&&!inTrials(i.id));
+}
+function drawIdeas(cat,n){
+  const pool=ideaPool(cat),ids=pool.map(i=>i.id);
+  let deck=(S.decks[cat]||[]).filter(id=>ids.includes(id));
+  if(deck.length<n){
+    const recent=S.recent.slice(-10);
+    let fresh=shuffle(ids.filter(id=>!recent.includes(id)&&!deck.includes(id)));
+    if(deck.length+fresh.length<n)fresh=shuffle(ids.filter(id=>!deck.includes(id)));
+    deck=deck.concat(fresh);
+  }
+  const out=deck.splice(0,n);
+  S.decks[cat]=deck;S.recent=S.recent.concat(out).slice(-40);save();
+  return out.map(id=>pool.find(i=>i.id===id)).filter(Boolean);
+}
+function ideaSheet(){
+  sheet(`<h2>Ideas for you</h2><p class="muted">Pick one to start a taste challenge. Ideas won't repeat until you've seen them all.</p>
+  ${ideas.length?ideas.map(it=>`<button class="opt" data-a="startitem" data-v="${it.id}"><span class="e">${it.e}</span><span><b>${esc(it.n)}</b><small>${esc(it.how)}</small><small>🧊 ${esc(it.pan)}</small></span></button>`).join(''):'<p class="muted">Nothing left in this list. You have tried so much!</p>'}
+  <div class="row"><button class="btn" data-a="moreideas">Show me more</button><button class="btn" data-a="need">Change mood</button><button class="btn" data-a="close">Close</button></div>`);
+}
+
+/* ============ actions ============ */
+const actions={
+  tab(d){tab=d.v;hideSheet();render();window.scrollTo(0,0)},
+  close(){pending=null;closeSheet()},
+  dismiss(){S.notice=null;save();render()},
+  dset(d){draft.look[d.v]=d.v2;render()},
+  picksym(d){draft.sym=+d.v;render()},
+  step1(){draft.step=1;render()},
+  step2(){
+    const el=document.getElementById('nm');if(el)draft.name=el.value;
+    if(!draft.name.trim()){toast('Type your name first');return}
+    draft.step=2;render();window.scrollTo(0,0);
+  },
+  start(){
+    if(draft.sym==null){toast('Pick a reward symbol');return}
+    S.name=draft.name.trim();S.look=Object.assign({},DEFAULT_LOOK,draft.look);S.artists=draft.artists.map(a=>a.trim()).filter(Boolean);S.sym=draft.sym;
+    save();fx();render();
+    setTimeout(()=>{if(!S.pin)setupPin(null)},900);
+  },
+  petTap(){
+    ensureQuiz();
+    const p=document.querySelector('.pet');if(p){p.classList.remove('jump');void p.offsetWidth;p.classList.add('jump')}
+    if(qUI.mode==='ask'||qUI.mode==='fb'||qUI.mode==='end')return;
+    if(!S.quiz.done){qUI.mode='offer';render();return}
+    petSay='Quiz done today! You got '+S.quiz.right+' out of 5. Come back tomorrow for more.';
+    render();setTimeout(()=>{petSay=null;render()},4500);
+  },
+  qlater(){qUI.mode='idle';render()},
+  qstart(){ensureQuiz();qUI.mode='ask';setOpts();render()},
+  qspeak(){const cur=QUIZ[S.quiz.ids[S.quiz.i]];speak(cur.q+'. '+qUI.opts.map(o=>o.t).join('. or. '))},
+  qpick(d){
+    if(qUI.mode!=='ask')return;
+    const k=+d.v;qUI.picked=k;qUI.mode='fb';
+    if(qUI.opts[k].ok){S.quiz.right+=1;earn(1,'Quiz answer')}
+    save();render();
+  },
+  qnext(){
+    if(S.quiz.i>=4){
+      S.quiz.done=true;
+      if(S.quiz.right===5&&!S.quiz.bonus){S.quiz.bonus=true;earn(3,'Perfect quiz bonus');fx()}
+      save();qUI.mode='end';render();return;
+    }
+    S.quiz.i+=1;save();qUI.mode='ask';setOpts();render();
+  },
+  qdone(){qUI.mode='idle';render()},
+  glow(d){
+    const g=GLOW.find(x=>x.k===d.v);
+    if(S.glow[d.v]){S.glow[d.v]=false;unearn(g.pts,g.t+' undone')}
+    else{S.glow[d.v]=true;earn(g.pts,g.t);toast('Nice! +'+fmt(g.pts)+' '+g.e)}
+    save();render();
+  },
+  /* taste bank */
+  rtype(d){recType=d.v;render()},
+  fridge(d){const i=fridge.indexOf(d.v);if(i>=0)fridge.splice(i,1);else fridge.push(d.v);render()},
+  fridgeclear(){fridge=[];render()},
+  known(d){if(!isKnown(d.v)){S.known.push(d.v);save()}render();toast('Got it. We will hide that one.')},
+  startitem(d){const it=RECIPES.find(i=>i.id===d.v);if(it)startSheet(it)},
+  sgo(d){
+    const c=readCountry();if(!c){toast('Type the country first');return}
+    startTrial(Object.assign({},ctxStart,{country:c,lv:+d.v}));
+  },
+  surprise(){
+    const pool=RECIPES.filter(i=>!isKnown(i.id)&&!inPlaylist(i.id)&&!inTrials(i.id));
+    ideas=shuffle(pool.length?pool:RECIPES).slice(0,3);ideaCat='any';ideaSheet();
+  },
+  need(){sheet(`<h2>What are you in the mood for?</h2>${NEEDS.map(n=>`<button class="opt" data-a="mood" data-v="${n[0]}"><span class="e">${n[1]}</span><span><b>${n[2]}</b></span></button>`).join('')}<div class="center"><button class="ghost" data-a="close">Never mind</button></div>`)},
+  mood(d){ideaCat=d.v;ideas=drawIdeas(d.v,4);ideaSheet()},
+  moreideas(){ideas=drawIdeas(ideaCat,4);ideaSheet()},
+  custom(){sheet(`<h2>➕ Add my own challenge</h2><p class="muted">Found something new to try? Type it in and start a ladder.</p><input type="text" id="cname" maxlength="40" placeholder="What is it?" autocomplete="off" style="margin-bottom:10px"><button class="big" data-a="cnext" style="background:var(--grass)">Next</button><div class="center"><button class="ghost" data-a="close">Cancel</button></div>`)},
+  cnext(){const n=(document.getElementById('cname').value||'').trim();if(!n){toast('Type what you are trying first');return}startSheet({id:'c_'+Date.now(),n,e:'🍽️',t:'m',g:[],how:'Your own find',pan:''})},
+  /* deposits and countries */
+  deposit(){depDraft={n:'',country:'Australia',cat:'m',lv:1,stars:0,note:''};depositSheet()},
+  dcat(d){syncDep();depDraft.cat=d.v;depositSheet()},
+  dlv(d){syncDep();depDraft.lv=+d.v;depositSheet()},
+  dstar(d){syncDep();depDraft.stars=+d.v;depositSheet()},
+  dgo(){
+    syncDep();const d=depDraft;
+    if(!d.n.trim()){toast('Type what you tried first');return}
+    if(!d.country){toast('Choose the country it is from');return}
+    if(!d.stars){toast('Tap a star rating first');return}
+    d.n=d.n.trim();
+    if(Math.random()*100<S.spot){
+      sheet(`<div class="center"><div style="font-size:56px">🕵️</div><h2>Spot check!</h2><p>Show a grown-up what you tried, then they enter the PIN so your new fan counts.</p></div><button class="big" data-a="depok" style="background:var(--grass);margin-bottom:10px">A grown-up is here</button><div class="center"><button class="ghost" data-a="close">Not now</button></div>`);
+      return;
+    }
+    doDeposit(false);
+  },
+  depok(){withPin(()=>{hideSheet();doDeposit(true);toast('Spot check passed! 🎉')})},
+  recountry(d){
+    const p=inPlaylist(d.v);if(!p)return;
+    ctxStart={editId:p.id};
+    sheet(`<h2>🌍 Where is ${esc(p.n)} from?</h2>${countryPick(COUNTRIES.some(c=>c[0]===p.country)?p.country:'__other')}<div style="height:12px"></div><button class="big" data-a="csave" style="background:var(--grass)">Save country</button><div class="center"><button class="ghost" data-a="close">Cancel</button></div>`);
+  },
+  csave(){
+    const c=readCountry();if(!c){toast('Choose a country');return}
+    const p=inPlaylist(ctxStart.editId);if(!p)return;
+    p.country=c;stampCountry(c);save();closeSheet();toast('Country updated '+flagOf(c));
+  },
+  prizesave(){const v=(document.getElementById('prize').value||'').trim();if(v){S.prize=v;save();toast('Prize saved 🎁')}},
+  /* ladder */
+  drop(d){S.trials=S.trials.filter(t=>t.id!==d.v);save();render();toast('No worries. Come back any time.')},
+  step(d){
+    const t=inTrials(d.v);if(!t)return;
+    const idx=+d.v2;
+    if(idx===t.done-1&&idx<3){const st=STEPS[idx];t.done=idx;t.pts=Math.max(0,(t.pts||0)-st.pts);unearn(st.pts,'Step undone: '+t.n);render();return}
+    if(idx!==t.done)return;
+    if(idx===4){
+      const pl=inPlaylist(t.id);
+      rateDraft={id:t.id,n:t.n,stars:pl?pl.stars:0,tags:pl?pl.tags.slice():[],note:pl?pl.note:'',trial:true};
+      rateSheet();return;
+    }
+    if(idx===3&&Math.random()*100<S.spot){
+      pending={id:t.id,idx};
+      sheet(`<div class="center"><div style="font-size:56px">🕵️</div><h2>Spot check!</h2><p>Show a grown-up your plate and your brave bite, then they enter the PIN so you get your points.</p></div><button class="big" data-a="spotok" style="background:var(--grass);margin-bottom:10px">A grown-up is here</button><div class="center"><button class="ghost" data-a="close">Not now</button></div>`);
+      return;
+    }
+    t._v=false;applyStep(t,idx);
+  },
+  spotok(){
+    const p=pending;if(!p)return;
+    withPin(()=>{const t=inTrials(p.id);pending=null;if(!t)return;t._v=true;hideSheet();applyStep(t,p.idx);toast('Spot check passed! 🎉')});
+  },
+  rstar(d){rateDraft.stars=+d.v;const n=document.getElementById('rnote');if(n)rateDraft.note=n.value;rateSheet()},
+  rtag(d){const n=document.getElementById('rnote');if(n)rateDraft.note=n.value;const i=rateDraft.tags.indexOf(d.v);if(i>=0)rateDraft.tags.splice(i,1);else if(rateDraft.tags.length<3)rateDraft.tags.push(d.v);rateSheet()},
+  rsave(){
+    const r=rateDraft;r.note=(document.getElementById('rnote').value||'').trim();
+    if(!r.stars){toast('Tap a star rating first');return}
+    const pl=inPlaylist(r.id);
+    if(pl){pl.stars=r.stars;pl.tags=r.tags.slice();pl.note=r.note}
+    hideSheet();
+    const t=inTrials(r.id);
+    if(r.trial&&t&&t.done===4){applyStep(t,4);S.trials=S.trials.filter(x=>x.id!==r.id);if(pl)pl.pts=(pl.pts||0)+2;save();render();toast('Review saved! 🎤')}
+    else{save();render();toast('Review updated ⭐')}
+    rateDraft=null;
+  },
+  rerate(d){const p=inPlaylist(d.v);if(!p)return;rateDraft={id:p.id,n:p.n,stars:p.stars,tags:p.tags.slice(),note:p.note,trial:false};rateSheet()},
+  encore(d){
+    const p=inPlaylist(d.v);
+    if(!p){const it=RECIPES.find(i=>i.id===d.v);if(it)startSheet(it);return}
+    p.tries+=1;p.last=todayStr();
+    if(!S.week.encoreIds.includes(p.id)){S.week.encoreIds.push(p.id);S.week.encore+=1;earn(2,'Encore: '+p.n);toast('Encore! +'+fmt(2)+' 🔁')}
+    else toast('Encore noted. Nice persistence!');
+    save();render();checkMissions();
+    rateDraft={id:p.id,n:p.n,stars:p.stars,tags:p.tags.slice(),note:p.note,trial:false};rateSheet();
+  },
+  menu(d){const p=inPlaylist(d.v);if(p){p.menu=!p.menu;save();render();toast(p.menu?'Added to your menu 🍽️':'Removed from menu')}},
+  /* missions and squad */
+  cook(){sheet(`<h2>🧑‍🍳 What did you make?</h2><input type="text" id="cooked" maxlength="40" placeholder="e.g. Veggie fried rice" autocomplete="off" style="margin-bottom:10px"><button class="big" data-a="cookgo" style="background:var(--grass)">Log it</button><div class="center"><button class="ghost" data-a="close">Cancel</button></div>`)},
+  cookgo(){const n=(document.getElementById('cooked').value||'').trim();if(!n){toast('Type what you made');return}S.week.cooked+=1;earn(2,'Cooked: '+n);save();hideSheet();render();checkMissions();fx();toast('Chef! +'+fmt(2)+' 🧑‍🍳')},
+  sqadd(){const el=document.getElementById('sqname'),v=(el.value||'').trim();if(!v)return;if(S.squad.length<12)S.squad.push(v);save();render()},
+  sqdel(d){S.squad.splice(+d.v,1);save();render()},
+  squad(){
+    sheet(`<h2>👯 Squad taste test</h2><p class="muted">Who did you taste with, and what was it?</p>
+    <div class="chips">${S.squad.map((n,i)=>`<button class="fchip" data-a="sqpick" data-v="${i}">${esc(n)}</button>`).join('')}<button class="fchip" data-a="sqpick" data-v="-1">A friend</button></div>
+    <input type="text" id="sqfood" maxlength="40" placeholder="What did you taste?" autocomplete="off" style="margin-bottom:10px"><p class="muted" id="sqwho">Tap a name above, or just log it.</p>
+    <button class="big" data-a="sqgo" style="background:var(--grass)">Log it</button><div class="center"><button class="ghost" data-a="close">Cancel</button></div>`);
+    squad.who='A friend';
+  },
+  sqpick(d){const i=+d.v;squad.who=i<0?'A friend':S.squad[i];const el=document.getElementById('sqwho');if(el)el.textContent='With: '+squad.who},
+  sqgo(){const f=(document.getElementById('sqfood').value||'').trim()||'something new';S.week.squad+=1;earn(3,'Squad taste test with '+(squad.who||'a friend')+': '+f);save();hideSheet();render();checkMissions();fx();toast('Squad goals! +'+fmt(3)+' 👯')},
+  treatopen(){sheet(`<h2>🧁 Pick your weekend treat</h2><p class="muted">You earned it! We'll make it together.</p>${TREATS.map((x,i)=>`<button class="opt" data-a="treatset" data-v="${i}"><span class="e">${x[0]}</span><span><b>${x[1]}</b></span></button>`).join('')}<h3>Or your own idea</h3><div class="row"><input type="text" id="mytreat" maxlength="30" placeholder="Type your idea" autocomplete="off"><button class="btn grass" data-a="treatown">Choose</button></div><div class="center"><button class="ghost" data-a="close">Later</button></div>`)},
+  treatset(d){const x=TREATS[+d.v];S.treat={week:S.week.start,item:x[0]+' '+x[1]};save();fx();closeSheet();toast('Treat picked! 🧁')},
+  treatown(){const v=(document.getElementById('mytreat').value||'').trim();if(!v)return;S.treat={week:S.week.start,item:'🧁 '+v};save();fx();closeSheet();toast('Treat picked! 🧁')},
+  /* studio */
+  studio(){hideSheet();studioSheet()},
+  scat(d){studioCat=d.v;studioSheet()},
+  sset(d){
+    const o=optsFor(studioCat).find(x=>x.id===d.v);
+    if(!o)return;
+    if(o.lv>level()){toast('Unlocks at level '+o.lv+' 🔒');return}
+    S.look[studioCat]=o.id;save();studioSheet();
+  },
+  studiodone(){
+    const n=(document.getElementById('pname').value||'').trim();if(n)S.name=n;
+    S.artists=[0,1,2].map(i=>(document.getElementById('part'+i).value||'').trim()).filter(Boolean);
+    save();closeSheet();
+  },
+  /* rewards and grown-ups */
+  buy(d){
+    const r=S.rewards.find(x=>x.id===d.v);if(!r||S.balance<r.c)return;
+    withPin(()=>{S.balance-=r.c;logIt(-r.c,'Got: '+r.n);save();fx();render();toast('Enjoy: '+r.n+' 🎁')});
+  },
+  rewardsmgr(){withPin(()=>rewardsSheet())},
+  rwadd(){
+    const n=(document.getElementById('rw-name').value||'').trim(),c=Math.max(1,parseInt(document.getElementById('rw-cost').value,10)||0),e=(document.getElementById('rw-emoji').value||'').trim()||'🎁';
+    if(!n||!c){toast('Add a name and a cost');return}
+    S.rewards.push({id:'r'+Date.now(),e,n,c});save();rewardsSheet();
+  },
+  rwdel(d){S.rewards=S.rewards.filter(r=>r.id!==d.v);save();rewardsSheet()},
+  grown(){withPin(()=>grownSheet())},
+  spotdelta(d){S.spot=Math.max(0,Math.min(100,S.spot+(+d.v)));save();grownSheet()},
+  givebonus(){const n=parseInt(document.getElementById('bonus-n').value,10);if(!n)return;if(n>0)earn(n,'Bonus from a grown-up');else{S.balance=Math.max(0,S.balance+n);logIt(n,'Adjustment');save()}grownSheet();toast('Done')},
+  verify(d){const p=inPlaylist(d.v);if(p&&!p.v){p.v=true;earn(1,'Verified: '+p.n);save();reviewSheet()}},
+  undotrack(d){
+    const p=inPlaylist(d.v);if(!p)return;
+    unearn(p.pts||0,'Removed: '+p.n);
+    S.playlist=S.playlist.filter(x=>x.id!==d.v);
+    S.week.tries=Math.max(0,S.week.tries-1);save();reviewSheet();
+  },
+  review(){reviewSheet()},
+  changepin(){S.pin=null;unlockedUntil=0;setupPin(null)},
+  resetall(){if(confirm('Erase everything and start over? This cannot be undone.')){const pin=S.pin;S=defaults();S.pin=pin;draft={name:'',look:Object.assign({},DEFAULT_LOOK),artists:['','',''],sym:null,step:1};qUI={mode:'idle',opts:[],picked:null};save();closeSheet()}}
+};
+const squad={who:'A friend'};
+function grownSheet(){
+  const unchecked=S.playlist.filter(p=>!p.v).length;
+  sheet(`<h2>Grown-ups</h2><p class="muted" style="margin-top:-4px">${BUILD}</p>
+  <div class="card"><b>Spot check chance</b><p class="muted" style="margin:4px 0 8px">How often a full bite needs a grown-up to confirm with the PIN. Other times she self-logs.</p><div class="row" style="align-items:center"><button class="btn" data-a="spotdelta" data-v="-25">−</button><div class="center"><b style="font-size:26px">${S.spot}%</b></div><button class="btn" data-a="spotdelta" data-v="25">+</button></div></div>
+  <button class="opt" data-a="review"><span class="e">🔍</span><span><b>Review recent tries</b><small>${unchecked} self-logged fan${unchecked===1?'':'s'} to check</small></span></button>
+  <div class="card"><b>🎁 Sold-out prize</b><p class="muted" style="margin:4px 0 8px">What she wins when the stadium sells out at 100 fans.</p><input type="text" id="prize" maxlength="80" value="${esc(S.prize)}" autocomplete="off" style="margin-bottom:8px"><button class="btn grass" data-a="prizesave" style="width:100%">Save prize</button></div>
+  <div class="card"><b>Give or take ${esc(sy()[2])}</b><div class="row" style="margin-top:8px"><input type="number" id="bonus-n" placeholder="e.g. 5 or -5" inputmode="numeric"><button class="btn grass" data-a="givebonus">Apply</button></div></div>
+  <button class="opt" data-a="rewardsmgr"><span class="e">🎁</span><span><b>Manage rewards</b><small>Add, price and remove</small></span></button>
+  <button class="opt" data-a="changepin"><span class="e">🔑</span><span><b>Change PIN</b></span></button>
+  <button class="opt" data-a="resetall"><span class="e">🗑️</span><span><b>Start over</b><small>Erases everything on this device</small></span></button>
+  <div class="card mint"><b>Tip</b><br>Praise bravery and curiosity, not how much she eats or her body. Honest "not for me yet" ratings are welcome, and re-tries are what build liking.</div>
+  <div class="center"><button class="btn" data-a="close">Done</button></div>`);
+}
+function reviewSheet(){
+  const list=S.playlist.filter(p=>!p.v).slice().reverse().slice(0,20);
+  sheet(`<h2>🔍 Review recent tries</h2><p class="muted">Confirm what she logged, or remove a fan that did not happen (its points are taken back).</p>
+  ${list.length?list.map(p=>`<div class="reward"><span class="e">${p.e}</span><span class="t"><b>${esc(p.n)}</b><br><span class="muted">${p.d}</span></span><button class="btn sm grass" data-a="verify" data-v="${esc(p.id)}">✔ Confirm +1</button><button class="btn sm berry" data-a="undotrack" data-v="${esc(p.id)}">Remove</button></div>`).join(''):'<p class="muted">Nothing to check right now.</p>'}
+  <div class="center" style="margin-top:12px"><button class="btn" data-a="grown">Back</button></div>`);
+}
+function rewardsSheet(){
+  sheet(`<h2>🎁 Rewards</h2><p class="muted">Add things she can save up for, and set the price.</p>
+  ${S.rewards.map(r=>`<div class="reward"><span class="e">${r.e}</span><span class="t"><b>${esc(r.n)}</b><br><span class="muted">${sy()[0]} ${r.c}</span></span><button class="btn berry sm" data-a="rwdel" data-v="${r.id}">Remove</button></div>`).join('')||'<p class="muted">No rewards yet.</p>'}
+  <div class="card" style="margin-top:12px"><b>Add a reward</b>
+  <input type="text" id="rw-name" maxlength="50" placeholder="Reward name" style="margin:8px 0" autocomplete="off">
+  <div class="row"><input type="number" id="rw-cost" placeholder="Cost" inputmode="numeric"><input type="text" id="rw-emoji" maxlength="4" placeholder="Emoji (optional)"></div>
+  <div style="height:10px"></div><button class="btn grass" data-a="rwadd" style="width:100%">Add reward</button></div>
+  <div class="center"><button class="btn" data-a="close">Done</button></div>`);
+}
+
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-a]');
+  if(a&&actions[a.dataset.a]){actions[a.dataset.a](a.dataset);return}
+  if(e.target.id==='overlay')closeSheet();
+});
+document.addEventListener('change',e=>{
+  const k=e.target.dataset.change;
+  if(k==='hide'){recHide=e.target.checked;render()}
+  if(k==='cty'){const o=document.getElementById('ctyo');if(o)o.style.display=e.target.value==='__other'?'block':'none'}
+});
+document.addEventListener('input',e=>{
+  const k=e.target.dataset.input;
+  if(k==='name')draft.name=e.target.value;
+  if(k&&k.startsWith('artist'))draft.artists[+k.slice(6)]=e.target.value;
+  if(k==='mq'){const q=e.target.value.toLowerCase().trim();document.querySelectorAll('.bankwrap details').forEach(d=>{d.style.display=(!q||d.dataset.name.includes(q))?'':'none'})}
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
+if('serviceWorker' in navigator){
+  let reloaded=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloaded)return;reloaded=true;location.reload()});
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=4').then(r=>r.update()).catch(()=>{}));
+}
+render();
+</script>
+</body>
+</html>
